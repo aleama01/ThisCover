@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
-  let [message, setMessage] = useState("")
-
-  useEffect(() => {
-    axios.get('/api/hello')
-      .then(response => setMessage(response.data.message))
-      .catch(error => console.error('There was an error!', error));
-  }, []);
 
   return (
     <div className="App">
-      <h1>{message}</h1>
+      <Routes>
+        <ProtectedRoute path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
+      </Routes>
     </div>
   );
 }
