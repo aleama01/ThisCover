@@ -10,6 +10,9 @@
     "@types/node": "^17.0.45",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.5",
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -52,5 +55,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "proxy": "http://localhost:3000"
 }
