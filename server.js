@@ -4,6 +4,9 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const cors = require('cors');
+
+app.use(cors());
 
 dotenv.config();
 
@@ -32,6 +35,7 @@ app.post('/api/register', async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = password;
 
     // Insert new user
     const newUser = await pool.query(
@@ -49,6 +53,7 @@ app.post('/api/register', async (req, res) => {
 // Login Route
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log(email)
   try {
     // Check if user exists
     const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
