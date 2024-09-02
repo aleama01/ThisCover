@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
+import '../index.css'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -25,22 +26,26 @@ const Login = () => {
   };
 
   return (
-    <div className='p-4'>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
+      <h1 className='text-center'>Login</h1>
+      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
+        <label htmlFor="email" className="text-left">Email</label>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="JohnSmith@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="col-12 mb-2"
         />
+        <label htmlFor="password" className="text-left">Password</label>
         <input
           type="password"
           placeholder="Password"
           value={password}
+          className="col-12 mb-2"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit" className='btn-accent w-100'>Login</button>
       </form>
       {message && <p>{message}</p>}
     </div>

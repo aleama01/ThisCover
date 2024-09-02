@@ -2,7 +2,7 @@
 import React, { ReactEventHandler, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
-import { getAlbum, getMyAlbum, getSearchResults } from '../lib/spotify-get-token';
+import { getSearchResults } from '../lib/spotify-get-token';
 
 const Dashboard = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
@@ -12,13 +12,6 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState([{ name: "" }]);
 
 
-  useEffect(() => {
-    const getAlbumName = async () => {
-      const res = await getMyAlbum();
-      setThing(res);
-    }
-    getAlbumName();
-  }, [])
 
   const handleLogout = () => {
     logout();

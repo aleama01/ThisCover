@@ -3,4 +3,70 @@
 html {
   font-family: 'Montserrat';
   font-weight: 200;
+  background-color: #171717;
+}
+
+body {
+  background-color: #171717;
+  color: #f1f1f1;
+}
+
+.dark-theme {
+  background-color: #171717;
+  color: #f1f1f1;
+}
+
+input {
+  background-color: #171717;
+  color: #f1f1f1;
+  border: 1px solid #f1f1f1;
+  border-radius: 24px;
+  padding: 4px 4px 4px 10px;
+  margin: 2px !important;
+}
+
+button {
+  border-radius: 24px !important;
+  padding: 4px 2px;
+  margin: 2px !important;
+}
+
+.btn-accent {
+  background-color: #1491F7;
+  color: #f1f1f1;
+  border: none;
+}
+
+.btn-black {
+  background-color: #171717;
+  color: #f1f1f1;
+  border: 1px solid #f1f1f1;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  height: 2px;
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #171717;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ffffe9;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #abac8e;
 }
