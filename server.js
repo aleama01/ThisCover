@@ -12,11 +12,11 @@ dotenv.config();
 
 // PostgreSQL pool setup
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: process.env.REACT_APP_DB_USER,
+  host: process.env.REACT_APP_DB_HOST,
+  database: process.env.REACT_APP_DB_DATABASE,
+  password: process.env.REACT_APP_DB_PASSWORD,
+  port: process.env.REACT_APP_DB_PORT,
 });
 
 // Middleware
@@ -53,7 +53,6 @@ app.post('/api/register', async (req, res) => {
 // Login Route
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log(email)
   try {
     // Check if user exists
     const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -66,9 +65,8 @@ app.post('/api/login', async (req, res) => {
     if (!validPassword) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
     // Create JWT token
-    const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.rows[0].id }, process.env.REACT_APP_JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ message: 'Logged in successfully', token });
   } catch (error) {
@@ -78,5 +76,5 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Start Server
-const port = process.env.PORT || 5000;
+const port = process.env.REACT_APP_PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

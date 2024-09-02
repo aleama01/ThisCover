@@ -7,7 +7,6 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     setIsAuthenticated(isAuthenticated)
-    console.log(isAuthenticated)
   }, [isAuthenticated])
 
   return (

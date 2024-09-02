@@ -14,21 +14,25 @@ export const AuthContext = createContext<IContext>({
 });
 
 const AuthProvider = ({ children }: any) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!sessionStorage.getItem('token'));
+  const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {
-    // Check if token exists in localStorage to set the initial auth state
-    const token = localStorage.getItem('token');
+    // Check if token exists in sessionStorage to set the initial auth state
+    const token = sessionStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
     }
+    setIsCheckingAuth(false)
   }, []);
 
   // Function to log out the user
   const logout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     setIsAuthenticated(false);
   };
+
+  if (isCheckingAuth) return null;
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logout }}>

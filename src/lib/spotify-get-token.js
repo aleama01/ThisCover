@@ -35,6 +35,24 @@ export const getMyAlbum = async () => {
   const response = await getAlbum();
   const item = await response.json()
   console.log(item)
-  return item
+  return item.name
 }
 
+export const search = async (secondEncodedName) => {
+  const { access_token } = await getAccessToken();
+  const res = fetch(`https://api.spotify.com/v1/search?q=${secondEncodedName}&type=album&limt=10&market=IT`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  })
+  return res;
+}
+
+export const getSearchResults = async (name) => {
+  const firstEncodedName = encodeURIComponent(name);
+  const secondEncodedName = encodeURIComponent(firstEncodedName);
+
+  const response = await search(secondEncodedName);
+  const item = await response.json()
+  return item
+} 
