@@ -25,7 +25,7 @@ const Login = () => {
   };
 
   return (
-    <div className='min-h-screen text-white'>
+    <div className='p-4'>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input

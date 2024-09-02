@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import './index.css';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import ProtectedRoute from './ProtectedRoute';
+import './index.css';
 
 function App() {
 
   return (
-    <div className=''>
+    <div>
       <Routes>
         <Route path='/' element={<ProtectedRoute />}>
           <Route path='/' element={<Dashboard />} />
