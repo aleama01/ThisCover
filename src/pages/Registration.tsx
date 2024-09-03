@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,6 +16,12 @@ const Registration = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/register', { username, email, password });
       setMessage(response.data.message);
+
+      const responseLogin = await axios.post('http://localhost:3000/api/login', { email, password });
+      sessionStorage.setItem('token', responseLogin.data.token);
+      sessionStorage.setItem('id', responseLogin.data.id);
+      setIsAuthenticated(true)
+      navigate('/');
     } catch (error: any) {
       setMessage(error.response.data.message);
     }
