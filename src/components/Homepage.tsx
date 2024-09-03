@@ -1,11 +1,14 @@
 import React from 'react'
+import Layout from './Layout'
 import Navbar from './Navbar'
 
 const Homepage = () => {
   return (
-    <div className='dark-theme'>
-      <Navbar />
-    </div>
+    <Layout>
+      <h1>
+        ThisCover
+      </h1>
+    </Layout>
   )
 }
 

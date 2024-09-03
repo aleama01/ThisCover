@@ -29,7 +29,7 @@ const Login = () => {
     <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
       <h1 className='text-center'>Login</h1>
       <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
-        <label htmlFor="email" className="text-left">Email</label>
+        <label htmlFor="email" className="text-left ps-2">Email</label>
         <input
           type="email"
           placeholder="JohnSmith@gmail.com"
@@ -37,12 +37,12 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           className="col-12 mb-2"
         />
-        <label htmlFor="password" className="text-left">Password</label>
+        <label htmlFor="password" className="text-left ps-2">Password</label>
         <input
           type="password"
           placeholder="Password"
           value={password}
-          className="col-12 mb-2"
+          className="col-12 mb-4"
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" className='btn-accent w-100'>Login</button>
