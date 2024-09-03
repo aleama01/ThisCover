@@ -59,6 +59,7 @@ app.post('/api/login', async (req, res) => {
     if (user.rows.length === 0) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+    const id = user.rows[0].id;
 
     // Check password
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
@@ -68,7 +69,7 @@ app.post('/api/login', async (req, res) => {
     // Create JWT token
     const token = jwt.sign({ id: user.rows[0].id }, process.env.REACT_APP_JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ message: 'Logged in successfully', token });
+    res.json({ message: 'Logged in successfully', token, id });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: 'Server error' });
@@ -96,20 +97,18 @@ app.post('/api/rating', async (req, res) => {
 
 // Insert a schedule element into the database
 app.post('/api/schedule', async (req, res) => {
-  const { userId, weekNumber, friendId, albumId } = req.body;
+  const { user_id, date, friend_id, album_id } = req.body;
   try {
-    const result = await pool.query(
-      `INSERT INTO Schedule (user_id, week_number, friend_id, album_id)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (user_id, week_number) DO UPDATE 
-       SET friend_id = EXCLUDED.friend_id, album_id = EXCLUDED.album_id
-       RETURNING *;`,
-      [userId, weekNumber, friendId, albumId]
-    );
-    res.status(201).json({ message: 'Schedule inserted successfully', schedule: result.rows[0] });
+    const insertQuery = `
+      INSERT INTO Schedule (user_id, deadline, friend_id, album_id)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const result = await pool.query(insertQuery, [user_id, date, friend_id, album_id]);
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error inserting schedule:', error.message);
-    res.status(500).json({ error: 'Server error' });
+    console.error(error.message);
+    res.status(500).json({ error: 'Error inserting schedule' });
   }
 });
 

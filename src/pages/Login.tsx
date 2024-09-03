@@ -15,9 +15,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/api/login', { email, password });
+      console.log(response)
       setMessage(response.data.message);
       // Save token to local storage or context
       sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('id', response.data.id);
       setIsAuthenticated(true)
       navigate('/');
     } catch (error: any) {

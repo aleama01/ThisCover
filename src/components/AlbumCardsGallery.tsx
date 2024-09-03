@@ -3,7 +3,7 @@ import { URL } from 'url'
 import { IAlbum } from '../interfaces'
 import AlbumCard from './AlbumCard'
 
-const AlbumCardsGallery = () => {
+const AlbumCardsGallery = ({ schedule }: { schedule: Array<any> }) => {
   const album: IAlbum = {
     title: "Lorem Ipsum",
     author: "Frank Sinatra",

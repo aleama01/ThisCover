@@ -10,7 +10,7 @@ const Registration = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/register', { username, email, password });
+      const response = await axios.post('http://localhost:3000/api/register', { username, email, password });
       setMessage(response.data.message);
     } catch (error: any) {
       setMessage(error.response.data.message);
@@ -18,28 +18,34 @@ const Registration = () => {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
+        <label htmlFor="text" className="text-left ps-2">Username</label>
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          className="col-12 mb-2"
         />
+        <label htmlFor="email" className="text-left ps-2">Email</label>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="col-12 mb-2"
         />
+        <label htmlFor="password" className="text-left ps-2">Password</label>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="col-12 mb-4"
         />
-        <button type="submit">Register</button>
+        <button type="submit" className='btn-accent w-100'>Register</button>
       </form>
       {message && <p>{message}</p>}
     </div>
