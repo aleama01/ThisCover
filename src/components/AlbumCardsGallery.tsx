@@ -1,31 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { URL } from 'url'
-import { IAlbum } from '../interfaces'
+import { IAlbum, ISchedule } from '../interfaces'
 import AlbumCard from './AlbumCard'
 
-const AlbumCardsGallery = ({ schedule }: { schedule: Array<any> }) => {
-  const album: IAlbum = {
-    title: "Lorem Ipsum",
-    author: "Frank Sinatra",
-    image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600",
-    tags: ["Neapolitan", "Black music", "Reggaeton"],
-    time_left: new Date("2024-12-31T23:59:59"),
-    user: {
-      name: "Giorgia Graziaplena",
-      image: "https://hackspirit.com/wp-content/uploads/2021/06/Copy-of-Rustic-Female-Teen-Magazine-Cover.jpg",
-    }
-  }
-
+const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
   const galleryRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const albums = [album, album, album]; // Sample data, replace with your actual albums
 
   // Function to handle scroll event
   const handleScroll = () => {
     if (!galleryRef.current) return;
 
     const scrollPosition = galleryRef.current.scrollLeft;
-    const itemWidth = galleryRef.current.scrollWidth / albums.length;
+    const itemWidth = galleryRef.current.scrollWidth / schedules.length;
     const index = Math.round(scrollPosition / itemWidth);
     setCurrentIndex(index);
   };
@@ -44,14 +31,14 @@ const AlbumCardsGallery = ({ schedule }: { schedule: Array<any> }) => {
   return (
     <>
       <div className='album-cards-gallery' ref={galleryRef}>
-        {albums.map((album, index) => (
+        {schedules && schedules.map((schedule, index) => (
           <div className="album-card-container" key={index}>
-            <AlbumCard album={album} />
+            <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} />
           </div>
         ))}
       </div>
       <div className="dots-container">
-        {albums.map((_, index) => (
+        {schedules && schedules.map((_, index) => (
           <div
             key={index}
             className={`dot ${currentIndex === index ? 'active' : ''}`}

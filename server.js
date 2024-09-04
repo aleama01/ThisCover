@@ -124,6 +124,19 @@ app.get('/api/schedules/:userId', async (req, res) => {
   }
 });
 
+// Get username from id
+app.get('/api/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await pool.query('SELECT username FROM Users WHERE id = $1', [userId]);
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error fetching schedules:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+)
+
 // Get all rating elements for an album and a user
 app.get('/api/ratings', async (req, res) => {
   const { userId, albumId } = req.query;

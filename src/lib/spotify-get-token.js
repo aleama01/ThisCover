@@ -1,3 +1,4 @@
+import { ISong } from '../interfaces.tsx'
 require('dotenv').config({ debug: true })
 
 var client_id = process.env.REACT_APP_CLIENT_ID;
@@ -45,29 +46,57 @@ export const getAlbumSongs = async (albumId) => {
   let songs = new Array;
   const response = await getSongs(albumId);
   const item = await response.json()
-
-  console.log(item);
-  return item
+  for (let el in item) {
+    let res = {
+      name: el.name,
+      id: el.id,
+      link: el.uri,
+      track_number: el.track_number,
+    }
+    songs.push(res)
+  }
+  console.log(songs);
+  return songs
 }
 
 export const getAlbums = async (ids) => {
   let albums = new Array;
-  for (let id in ids) {
+  for (let id of ids) {
+    console.log(id)
     const response = await getAlbum(id);
     const item = await response.json()
     const album = {
       id: item.id,
-      name: item.name,
+      title: item.name,
       release_date: item.release_date,
-      artists: item.artists.items.map((_artist) => ({
+      artists: item.artists.map((_artist) => ({
         name: _artist.name
       })
       ),
+      image: item.images[0].url,
+      tags: item.genres,
     }
     albums.push(album)
   }
-
   return albums
+}
+
+export const getOneAlbum = async (id) => {
+  const response = await getAlbum(id);
+  const item = await response.json()
+  const album = {
+    id: item.id,
+    title: item.name,
+    release_date: item.release_date,
+    artists: item.artists.map((_artist) => ({
+      name: _artist.name
+    })
+    ),
+    url: item.external_urls.spotify,
+    image: item.images[0].url,
+    tags: item.genres,
+  }
+  return album
 }
 
 export const search = async (secondEncodedName) => {
