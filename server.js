@@ -100,11 +100,11 @@ app.post('/api/schedule', async (req, res) => {
   const { user_id, date, friend_id, album_id } = req.body;
   try {
     const insertQuery = `
-      INSERT INTO Schedule (user_id, deadline, friend_id, album_id)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO Schedule (user_id, deadline, friend_id, album_id, is_active)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
-    const result = await pool.query(insertQuery, [user_id, date, friend_id, album_id]);
+    const result = await pool.query(insertQuery, [user_id, date, friend_id, album_id, true]);
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error.message);
@@ -116,10 +116,34 @@ app.post('/api/schedule', async (req, res) => {
 app.get('/api/schedules/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM Schedule WHERE user_id = $1', [userId]);
+    const result = await pool.query('SELECT * FROM Schedule WHERE user_id = $1 AND is_active = $2', [userId, true]);
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching schedules:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Update the is_active status of a schedule
+app.put('/api/schedules/:userId/:deadline', async (req, res) => {
+  const { userId, deadline } = req.params; // Assuming weekId uniquely identifies the schedule with the userId
+  const { isActive } = req.body; // Get the new isActive status from the request body
+
+  try {
+    // Update the is_active status of the schedule entry
+    const result = await pool.query(
+      'UPDATE Schedule SET is_active = $1 WHERE user_id = $2 AND deadline = $3 RETURNING *',
+      [isActive, userId, deadline]
+    );
+
+    // Check if the update affected any rows
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Schedule not found' });
+    }
+
+    res.status(200).json({ message: 'Schedule updated successfully', schedule: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating schedule:', error.message);
     res.status(500).json({ error: 'Server error' });
   }
 });

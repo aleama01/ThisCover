@@ -64,8 +64,8 @@ const Homepage = () => {
     };
 
     fetchSchedules();
-    setLoading(false);
-  }, [isId, isCheckingId]);
+    setTimeout(() => setLoading(false), 600)
+  }, [isId]);
 
   return (
     <Layout>
@@ -75,10 +75,12 @@ const Homepage = () => {
       <div className='position-absolute top-0 end-0 mx-3 my-4'>
         <button onClick={handleLogout} className="px-2 btn-black">Logout</button>
       </div>
-      <div className='my-auto'>
-        <Suspense fallback={<Loading />}>
-          <AlbumCardsGallery schedules={schedules} />
-        </Suspense>
+      <div className='my-auto mx-auto'>
+        {loading ? <Loading /> :
+          <Suspense fallback={<Loading />}>
+            <AlbumCardsGallery schedules={schedules} />
+          </Suspense>
+        }
       </div>
     </Layout>
   )
