@@ -26,5 +26,6 @@ export interface ISchedule {
 
 export interface IUser {
   id: number,
-  username: string
+  username: string,
+  image_url: string
 }

@@ -5,12 +5,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 app.use(cors());
 
 dotenv.config();
 
-// PostgreSQL pool setup
+cloudinary.config({
+  cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
+  api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET,
+});
+
 const pool = new Pool({
   user: process.env.REACT_APP_DB_USER,
   host: process.env.REACT_APP_DB_HOST,
@@ -23,24 +31,44 @@ const pool = new Pool({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+
+// Configure Multer to use Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'user_images',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'heic'],
+  },
+});
+
+const upload = multer({ storage });
+
+
 // Register Route
-app.post('/api/register', async (req, res) => {
-  const { username, email, password } = req.body;
+app.post('/api/register', upload.single('profileImage'), async (req, res) => {
+  const { username, password } = req.body;
+  let imageUrl = process.env.REACT_APP_CLOUDINARY_DEFAULT_URL;
+
+  // Check if an image was uploaded
+  if (req.file) {
+    imageUrl = req.file.path; // Cloudinary automatically provides the image URL
+  }
+
   try {
     // Check if user exists
-    const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const userCheck = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     if (userCheck.rows.length > 0) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    //const hashedPassword = password;
 
-    // Insert new user
+    // Insert new user with the image URL
     const newUser = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
-      [username, email, hashedPassword]
+      'INSERT INTO users (username, password, image_url) VALUES ($1, $2, $3) RETURNING *',
+      [username, hashedPassword, imageUrl]
     );
 
     res.status(201).json({ message: 'User registered successfully', user: newUser.rows[0] });
@@ -52,10 +80,10 @@ app.post('/api/register', async (req, res) => {
 
 // Login Route
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   try {
     // Check if user exists
-    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     if (user.rows.length === 0) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -116,7 +144,7 @@ app.post('/api/schedule', async (req, res) => {
 app.get('/api/schedules/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM Schedule WHERE user_id = $1 AND is_active = $2', [userId, true]);
+    const result = await pool.query('SELECT * FROM Schedule WHERE user_id = $1 OR friend_id = $1 AND is_active = $2', [userId, true]);
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching schedules:', error.message);
@@ -195,8 +223,30 @@ app.post('/api/friends', async (req, res) => {
 app.get('/api/friends/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM Friends WHERE user_id = $1', [userId]);
-    res.json(result.rows);
+    let users_ids = new Array;
+    let result_tmp = new Array;
+
+    // Get all friends ids
+    const result = await pool.query('SELECT * FROM Friends WHERE user_id = $1 OR friend_id = $1', [userId]);
+    result.rows.map((row) => {
+      if (userId == row.user_id) {
+        users_ids.push(row.friend_id);
+      } else if (userId == row.friend_id) {
+        users_ids.push(row.user_id)
+      }
+    })
+
+    //Get all friends data
+    for (let id of users_ids) {
+      try {
+        const result = await pool.query('SELECT username,id,image_url FROM Users WHERE id = $1', [id]);
+        result_tmp.push(result.rows[0])
+      } catch (error) {
+        console.error('Error fetching schedules:', error.message);
+        res.status(500).json({ error: 'Server error' });
+      }
+    }
+    res.json(result_tmp);
   } catch (error) {
     console.error('Error fetching friends:', error.message);
     res.status(500).json({ error: 'Server error' });

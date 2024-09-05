@@ -33,6 +33,11 @@ input {
   margin: 2px !important;
 }
 
+#user_img_input {
+  border: none;
+  padding: 4px;
+}
+
 button {
   border-radius: 24px !important;
   padding: 4px 2px;

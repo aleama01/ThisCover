@@ -5,7 +5,7 @@ import { AuthContext } from '../AuthContext';
 import '../index.css'
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', { email, password });
+      const response = await axios.post('http://localhost:3000/api/login', { username, password });
       setMessage(response.data.message);
       // Save token to local storage or context
       sessionStorage.setItem('token', response.data.token);
@@ -30,12 +30,12 @@ const Login = () => {
     <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
       <h1 className='text-center'>Login</h1>
       <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
-        <label htmlFor="email" className="text-left ps-2">Email</label>
+        <label htmlFor="username" className="text-left ps-2">Username</label>
         <input
-          type="email"
-          placeholder="JohnSmith@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="username"
+          placeholder="JohnSmith"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="col-12 mb-2"
         />
         <label htmlFor="password" className="text-left ps-2">Password</label>
