@@ -15,13 +15,6 @@ const Homepage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
   const [albums, setAlbums] = useState<Array<IAlbum>>([]);
-  const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  }
 
   useEffect(() => {
     const user_id = sessionStorage.getItem('id')
@@ -72,9 +65,6 @@ const Homepage = () => {
       <h1 className='text-center my-4'>
         ThisCover
       </h1>
-      <div className='position-absolute top-0 end-0 mx-3 my-4'>
-        <button onClick={handleLogout} className="px-2 btn-black">Logout</button>
-      </div>
       <div className='my-auto mx-auto'>
         {loading ? <Loading /> :
           <Suspense fallback={<Loading />}>

@@ -253,6 +253,19 @@ app.get('/api/friends/:userId', async (req, res) => {
   }
 });
 
+// Get all users
+app.get('/api/allusers/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    // Get all friends ids
+    const result = await pool.query('SELECT username,image_url,id FROM Users WHERE id != $1', [userId]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching friends:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Start Server
 const port = process.env.REACT_APP_PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

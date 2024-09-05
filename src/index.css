@@ -16,7 +16,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  justify-content: space-between;
 }
 
 .dark-theme {
@@ -171,6 +170,13 @@ button:focus {
   transform: translateY(-50%);
 }
 
+.absolute-center {
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
+
 .album-tag {
   background-color: #f1f1f1;
   color: #131313;
@@ -221,4 +227,30 @@ button:focus {
 .dot.active {
   transform: scale(1.5);
   background-color: #f1f1f1;
+}
+
+.user-pic {
+  border-radius: 99999px;
+}
+
+.friend-card {
+  background-color: #131313;
+  width: 100dvw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 25px 13px 25px;
+}
+
+.borderr {
+  border: 1px solid red;
+}
+
+.search-bar {
+  background-color: #131313;
+  border: none;
+  width: 100%;
+  margin: 10px 24px !important;
+  padding: 6px 0 6px 10%;
 }

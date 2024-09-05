@@ -1,7 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
+import FriendCard from '../components/FriendCard';
 import Layout from '../components/Layout'
+import Loading from '../components/Loading';
+import SearchbarUsers from '../components/SearchbarUsers';
 import { IUser } from '../interfaces';
+import { getSearchResults } from '../lib/spotify-get-token';
 
 const Friends = () => {
   const [isId, setIsId] = useState(sessionStorage.getItem('id'));
@@ -29,7 +33,7 @@ const Friends = () => {
             friends_tmp.push({
               id: el.id,
               username: el.username,
-              image_url: el.image_url
+              image_url: el.image_url || "https://res.cloudinary.com/dcfsv0xbp/image/upload/v1725527932/profile-user-icon-isolated-on-white-background-eps10-free-vector_clcz86.jpg"
             })
           }
 
@@ -44,18 +48,24 @@ const Friends = () => {
     fetchFriends();
   }, [isId]);
 
-  console.log(friends)
+
   return (
     <Layout>
-      <h1>Friends </h1>
-      {friends.map((friend, index) => {
-        return (
-          <div key={index} className="">
-            <img src={friend.image_url} width={200} height={200} className="" />
-            <p>{friend.username}</p>
-          </div>
-        )
-      })}
+      <h1 className='text-left my-4' style={{ paddingLeft: "25px" }}>Friends </h1>
+      <div className='d-flex flex-column overflow-hidden '>
+        <SearchbarUsers id={isId!} />
+        {loading ?
+          <div className='position-absolute absolute-center'><Loading /></div> :
+          <Suspense fallback={<div className='position-absolute absolute-center'><Loading /></div>}>
+            <h4 className='fw-16 my-2' style={{ paddingLeft: "25px" }}>Your friends</h4>
+            {friends.map((friend, index) => {
+              return (
+                <FriendCard key={index} friend={friend} />
+              )
+            })}
+          </Suspense>
+        }
+      </div>
     </Layout>
   )
 }
