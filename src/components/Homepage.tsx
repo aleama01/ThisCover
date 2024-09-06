@@ -33,7 +33,8 @@ const Homepage = () => {
               },
               deadline: el.deadline,
               friend_id: el.friend_id,
-              user_id: el.user_id
+              user_id: el.user_id,
+              is_active: el.is_active
             })
           }
 

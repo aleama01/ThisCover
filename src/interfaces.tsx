@@ -21,7 +21,8 @@ export interface ISchedule {
   album: IAlbum,
   deadline: Date,
   friend_id: number,
-  user_id: number
+  user_id: number,
+  is_active: boolean
 }
 
 export interface IUser {

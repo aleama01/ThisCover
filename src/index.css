@@ -261,8 +261,7 @@ button:focus {
   background-color: #131313;
   border: none;
   width: 100%;
-  margin: 10px 24px !important;
-  padding: 6px 0 6px 10%;
+  padding: 6px 0 6px 15%;
 }
 
 .add-friend-btn {

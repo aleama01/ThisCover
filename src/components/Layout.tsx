@@ -11,6 +11,7 @@ const Layout = ({ children }: any) => {
     logout();
     navigate('/login');
   }
+
   return (
     <div className='dark-theme layout'>
       <div className='position-absolute top-0 end-0 mx-3 my-4'>
