@@ -2,27 +2,15 @@ import React, { Suspense, useContext, useEffect, useState } from 'react'
 import AlbumCardsGallery from './AlbumCardsGallery'
 import Layout from './Layout'
 import axios from 'axios'
-import Navbar from './Navbar'
-import { AuthContext } from '../AuthContext'
-import { useNavigate } from 'react-router-dom'
 import { IAlbum, ISchedule } from '../interfaces'
 import { getAlbums, getOneAlbum } from '../lib/spotify-get-token'
 import Loading from './Loading'
+import { AuthContext } from '../AuthContext'
 
 const Homepage = () => {
-  const [isId, setIsId] = useState(sessionStorage.getItem('id'));
-  const [isCheckingId, setIsCheckingId] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
-  const [albums, setAlbums] = useState<Array<IAlbum>>([]);
-
-  useEffect(() => {
-    const user_id = sessionStorage.getItem('id')
-    if (user_id) {
-      setIsId(user_id)
-    }
-    setIsCheckingId(false)
-  }, [])
+  const { isId } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchSchedules = async () => {

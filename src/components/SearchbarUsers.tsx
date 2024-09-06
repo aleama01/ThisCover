@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { IUser } from '../interfaces';
 import FriendCard from './FriendCard';
 
-const SearchbarUsers = ({ id }: { id: string }) => {
+const SearchbarUsers = ({ id, friends }: { id: string, friends: Array<number> }) => {
   const [allUsers, setAllUsers] = useState<IUser[]>([])
   const [searchUser, setSearchUsers] = useState("");
   const [searchResultsUsers, setSearchResultsUsers] = useState<Array<IUser>>([]);
@@ -53,9 +53,11 @@ const SearchbarUsers = ({ id }: { id: string }) => {
           <h4 className='fw-16 my-2' style={{ paddingLeft: "25px" }}>Search results</h4>{
 
             searchResultsUsers.length > 0 ? (
-              searchResultsUsers.map((user, index) => (
-                <FriendCard key={index} friend={user} />
-              ))
+              searchResultsUsers
+                .filter((el) => !friends.includes(el.id))
+                .map((user, index) => (
+                  <FriendCard key={index} friend={user} is_friend={false} />
+                ))
             )
               :
               <p className='text-gray fs-14 my-4 mx-auto'>User not found :c</p>

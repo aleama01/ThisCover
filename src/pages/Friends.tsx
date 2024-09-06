@@ -1,5 +1,6 @@
 import axios from 'axios';
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../AuthContext';
 import FriendCard from '../components/FriendCard';
 import Layout from '../components/Layout'
 import Loading from '../components/Loading';
@@ -8,18 +9,9 @@ import { IUser } from '../interfaces';
 import { getSearchResults } from '../lib/spotify-get-token';
 
 const Friends = () => {
-  const [isId, setIsId] = useState(sessionStorage.getItem('id'));
-  const [isCheckingId, setIsCheckingId] = useState<boolean>(true);
+  const { isId, reload, setReload } = useContext(AuthContext)
   const [friends, setFriends] = useState<Array<IUser>>([])
   const [loading, setLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    const user_id = sessionStorage.getItem('id')
-    if (user_id) {
-      setIsId(user_id)
-    }
-    setIsCheckingId(false)
-  }, [])
 
 
   useEffect(() => {
@@ -46,21 +38,21 @@ const Friends = () => {
     };
 
     fetchFriends();
-  }, [isId]);
+  }, [isId, reload]);
 
 
   return (
     <Layout>
       <h1 className='text-left my-4' style={{ paddingLeft: "25px" }}>Friends </h1>
       <div className='d-flex flex-column overflow-hidden '>
-        <SearchbarUsers id={isId!} />
+        <SearchbarUsers id={isId!} friends={friends.map(f => f.id)} />
         {loading ?
           <div className='position-absolute absolute-center'><Loading /></div> :
           <Suspense fallback={<div className='position-absolute absolute-center'><Loading /></div>}>
             <h4 className='fw-16 my-2' style={{ paddingLeft: "25px" }}>Your friends</h4>
             {friends.map((friend, index) => {
               return (
-                <FriendCard key={index} friend={friend} />
+                <FriendCard key={index} friend={friend} is_friend={true} />
               )
             })}
           </Suspense>

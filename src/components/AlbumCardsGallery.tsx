@@ -31,14 +31,23 @@ const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
   return (
     <>
       <div className='album-cards-gallery' ref={galleryRef}>
-        {schedules && schedules.map((schedule, index) => (
-          <div className="album-card-container" key={index}>
-            <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} />
+        {schedules.length > 0 ?
+          schedules.map((schedule, index) => (
+            <div className="album-card-container" key={index}>
+              <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} />
+            </div>
+          ))
+          :
+          <div className='album-card py-4'>
+            <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
+              <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!<br /> You can add one from a friend's page or from below</p>
+            </div>
+            <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
           </div>
-        ))}
+        }
       </div>
       <div className="dots-container">
-        {schedules && schedules.map((_, index) => (
+        {schedules.length > 0 && schedules.map((_, index) => (
           <div
             key={index}
             className={`dot ${currentIndex === index ? 'active' : ''}`}

@@ -8,6 +8,7 @@ import './index.css';
 import Homepage from './components/Homepage';
 import Friends from './pages/Friends';
 import Account from './pages/Account';
+import FriendPage from './pages/friends/FriendPage';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' element={<Homepage />} />
         <Route path='/friends' element={<Friends />} />
         <Route path='/account' element={<Account />} />
+        <Route path='/friends/:friend_username/:friend_id' element={<FriendPage />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />

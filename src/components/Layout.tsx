@@ -14,7 +14,7 @@ const Layout = ({ children }: any) => {
   return (
     <div className='dark-theme layout'>
       <div className='position-absolute top-0 end-0 mx-3 my-4'>
-        <button onClick={handleLogout} className="px-2 btn-black">Logout</button>
+        <button onClick={handleLogout} className="px-2 btn-black fs-12">Logout</button>
       </div>
       {children}
       <div style={{ height: "100px" }} />

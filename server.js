@@ -140,6 +140,18 @@ app.post('/api/schedule', async (req, res) => {
   }
 });
 
+// Get all common schedule elements for a couple of users
+app.get('/api/schedules/:userId/:friendId', async (req, res) => {
+  const { userId, friendId } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM Schedule WHERE (user_id = $1 AND friend_id = $2) OR (friend_id = $1 AND user_id = $2)', [userId, friendId]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching schedules:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Get all schedule elements for a user
 app.get('/api/schedules/:userId', async (req, res) => {
   const { userId } = req.params;
@@ -180,7 +192,7 @@ app.put('/api/schedules/:userId/:deadline', async (req, res) => {
 app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query('SELECT username FROM Users WHERE id = $1', [userId]);
+    const result = await pool.query('SELECT username,image_url FROM Users WHERE id = $1', [userId]);
     res.json(result.rows[0]);
   } catch (error) {
     console.error('Error fetching schedules:', error.message);
@@ -204,6 +216,7 @@ app.get('/api/ratings', async (req, res) => {
 // Insert a friend element into the database
 app.post('/api/friends', async (req, res) => {
   const { userId, friendId } = req.body;
+  console.log(userId, friendId)
   try {
     const result = await pool.query(
       `INSERT INTO Friends (user_id, friend_id)
