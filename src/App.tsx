@@ -9,6 +9,7 @@ import Homepage from './components/Homepage';
 import Friends from './pages/Friends';
 import Account from './pages/Account';
 import FriendPage from './pages/friends/FriendPage';
+import RatingPage from './pages/rating/RatingPage';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path='/friends' element={<Friends />} />
         <Route path='/account' element={<Account />} />
         <Route path='/friends/:friend_username/:friend_id' element={<FriendPage />} />
+        <Route path='/rating/:user_id/:friend_id/:album_id' element={<RatingPage />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />

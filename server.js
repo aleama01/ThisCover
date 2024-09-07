@@ -105,8 +105,9 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Insert a rating element into the database
-app.post('/api/rating', async (req, res) => {
+app.post('/api/ratings', async (req, res) => {
   const { userId, albumId, songId, rating, comment } = req.body;
+  console.log(userId, albumId, songId, rating)
   try {
     const result = await pool.query(
       `INSERT INTO Rating (user_id, album_id, song_id, rating, comment)
@@ -156,7 +157,16 @@ app.get('/api/schedules/:userId/:friendId', async (req, res) => {
 app.get('/api/schedules/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM Schedule WHERE user_id = $1 OR friend_id = $1 AND is_active = $2', [userId, true]);
+    const result = await pool.query(`SELECT *,
+    CASE 
+      WHEN user_id = $1 THEN friend_id
+      WHEN friend_id = $1 THEN user_id
+      END AS selected_id
+      FROM Schedule 
+      WHERE (user_id = $1 OR friend_id = $1) 
+      AND is_active = $2`,
+      [userId, true]);
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching schedules:', error.message);
@@ -188,7 +198,7 @@ app.put('/api/schedules/:userId/:deadline', async (req, res) => {
   }
 });
 
-// Get username from id
+// Get username and image from id
 app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
@@ -202,8 +212,8 @@ app.get('/api/users/:userId', async (req, res) => {
 )
 
 // Get all rating elements for an album and a user
-app.get('/api/ratings', async (req, res) => {
-  const { userId, albumId } = req.query;
+app.get('/api/ratings/:userId/:albumId', async (req, res) => {
+  const { userId, albumId } = req.params;
   try {
     const result = await pool.query('SELECT * FROM Rating WHERE user_id = $1 AND album_id = $2', [userId, albumId]);
     res.json(result.rows);

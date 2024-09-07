@@ -124,6 +124,10 @@ button:focus {
   border-radius: 9999px;
 }
 
+.fs-10 {
+  font-size: 10px;
+}
+
 .fs-12 {
   font-size: 12px;
 }
@@ -296,4 +300,38 @@ button:focus {
 .profile-sec-el-active {
   color: #f1f1f1;
   background-color: #6d6d6d;
+}
+
+.rating-number {
+  font-size: 2.5rem;
+  text-align: center;
+  line-height: 1;
+}
+
+.comment-input {
+  font-size: 12px;
+  border-radius: 12px;
+  border: none;
+  background-color: #131313;
+  padding: 6px 8px;
+  min-height: 70px;
+  width: 100%;
+  color: #f1f1f1;
+  resize: none;
+}
+
+.tracklist-box {
+  background-color: #131313;
+  width: 100%;
+  padding: 8px 25px 10px 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.song-rating-input {
+  background-color: transparent;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  padding: 2px;
+  color: #f1f1f1;
 }

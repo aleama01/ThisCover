@@ -1,10 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 import { timeLeft } from '../functions'
 import { IAlbum, IUser } from '../interfaces'
 
 const AlbumCard = ({ album, friendId, deadline }: { album: IAlbum, friendId: number, deadline: Date }) => {
   const [friendUsername, setFriendUsername] = useState<string>()
+  const { isId } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFriend = async (id: number) => {
@@ -18,6 +22,10 @@ const AlbumCard = ({ album, friendId, deadline }: { album: IAlbum, friendId: num
 
     fetchFriend(friendId);
   }, []);
+
+  const handleClick = () => {
+    navigate(`/rating/${isId}/${friendId}/${album.id}`)
+  }
 
   return (
     <div className='album-card m-auto lh-1 '>
@@ -64,14 +72,14 @@ const AlbumCard = ({ album, friendId, deadline }: { album: IAlbum, friendId: num
             */}
 
       <div className='w-100 d-flex flex-column fs-18 mt-3'>
-        <a target="_blank" rel="noopener noreferrer" className='w-100' href={album.url}>
-          <button type='button' className='btn-accent w-100 fw-300 py-2 position-relative'>
-            <svg className='position-absolute start-5' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 20.25C19 19.848 18.644 19.5 18.25 19.5C15.689 19.5 6.311 19.5 3.75 19.5C3.356 19.5 3 19.848 3 20.25C3 20.652 3.356 21 3.75 21H18.25C18.644 21 19 20.652 19 20.25ZM6.977 13.167C5.643 17.083 5.497 17.399 5.497 17.754C5.497 18.281 5.957 18.503 6.246 18.503C6.598 18.503 6.914 18.366 10.82 17.01L6.977 13.167ZM8.037 12.106L11.883 15.952L20.707 7.138C20.902 6.943 21 6.687 21 6.431C21 6.176 20.902 5.92 20.707 5.725C20.015 5.034 18.965 3.984 18.272 3.293C18.077 3.098 17.821 3 17.565 3C17.311 3 17.055 3.098 16.859 3.293L8.037 12.106Z" fill="#F1F1F1" />
-            </svg>
-            Start Rating
-          </button>
-        </a>
+
+        <button type='button' className='btn-accent w-100 fw-300 py-2 position-relative' onClick={handleClick}>
+          <svg className='position-absolute start-5' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 20.25C19 19.848 18.644 19.5 18.25 19.5C15.689 19.5 6.311 19.5 3.75 19.5C3.356 19.5 3 19.848 3 20.25C3 20.652 3.356 21 3.75 21H18.25C18.644 21 19 20.652 19 20.25ZM6.977 13.167C5.643 17.083 5.497 17.399 5.497 17.754C5.497 18.281 5.957 18.503 6.246 18.503C6.598 18.503 6.914 18.366 10.82 17.01L6.977 13.167ZM8.037 12.106L11.883 15.952L20.707 7.138C20.902 6.943 21 6.687 21 6.431C21 6.176 20.902 5.92 20.707 5.725C20.015 5.034 18.965 3.984 18.272 3.293C18.077 3.098 17.821 3 17.565 3C17.311 3 17.055 3.098 16.859 3.293L8.037 12.106Z" fill="#F1F1F1" />
+          </svg>
+          Start Rating
+        </button>
+
 
         <a target="_blank" rel="noopener noreferrer" className='w-100' href={album.url}>
           <button type='button' className='btn-black w-100 fw-300 py-2 mt-1 position-relative'>

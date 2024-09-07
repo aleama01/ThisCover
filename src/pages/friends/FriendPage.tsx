@@ -6,21 +6,24 @@ import { ISchedule } from '../../interfaces';
 import { getOneAlbum } from '../../lib/spotify-get-token';
 import { AuthContext } from '../../AuthContext';
 import AlbumCard from '../../components/AlbumCard';
+import Loading from '../../components/Loading';
 
 const CurrentSection = ({ friend_username, schedules }: { friend_username: string, schedules: Array<ISchedule> }) => {
   return (
     <>
       <div className='mt-1 mb-4'>
-        <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>Current album</h4>
         {schedules.length > 0 ?
           <AlbumCard album={schedules[0].album} friendId={schedules[0].friend_id} deadline={schedules[0].deadline} />
           :
-          <div className='album-card py-4 my-2 mx-auto'>
-            <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
-              <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!</p>
+          <>
+            <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>Current album</h4>
+            <div className='album-card py-4 my-2 mx-auto'>
+              <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
+                <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!</p>
+              </div>
+              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
             </div>
-            <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
-          </div>
+          </>
         }
 
       </div>
@@ -129,7 +132,10 @@ const FriendPage = () => {
         <div className={`col-6 duration-300 profile-sec-el ${profileSec == "archive" && "profile-sec-el-active"}`} onClick={() => setProfileSec("archive")}>Archive</div>
       </div>
 
-      {profileSec == "current" ? <CurrentSection friend_username={friend_username!} schedules={schedules.filter(s => s.is_active)} /> : profileSec == "archive" && <ArchiveSection schedules={schedules.filter(s => !s.is_active)} />}
+      {loading ? <Loading /> :
+        profileSec == "current" ?
+          <CurrentSection friend_username={friend_username!} schedules={schedules.filter(s => s.is_active)} />
+          : profileSec == "archive" && <ArchiveSection schedules={schedules.filter(s => !s.is_active)} />}
     </Layout>
   )
 }

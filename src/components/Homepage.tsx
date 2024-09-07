@@ -15,8 +15,10 @@ const Homepage = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
+        console.log(isId)
         if (!isId) return;
         const response = await axios.get(`http://localhost:3000/api/schedules/${isId}`);
+        console.log(response.data)
         if (response.data) {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {
@@ -32,7 +34,7 @@ const Homepage = () => {
                 url: album.url
               },
               deadline: el.deadline,
-              friend_id: el.friend_id,
+              friend_id: el.selected_id,
               user_id: el.user_id,
               is_active: el.is_active
             })

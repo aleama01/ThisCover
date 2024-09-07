@@ -34,7 +34,6 @@ export const getAlbum = async (albumId) => {
 
 export const getSongs = async (albumId) => {
   const { access_token } = await getAccessToken();
-
   return fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -46,7 +45,8 @@ export const getAlbumSongs = async (albumId) => {
   let songs = new Array;
   const response = await getSongs(albumId);
   const item = await response.json()
-  for (let el in item) {
+
+  for (let el of item.items) {
     let res = {
       name: el.name,
       id: el.id,
@@ -55,7 +55,7 @@ export const getAlbumSongs = async (albumId) => {
     }
     songs.push(res)
   }
-  console.log(songs);
+
   return songs
 }
 

@@ -30,3 +30,11 @@ export interface IUser {
   username: string,
   image_url: string
 }
+
+export interface IRating {
+  user_id: number,
+  song_id: string,
+  album_id: string,
+  rating: number,
+  comment?: string
+}
