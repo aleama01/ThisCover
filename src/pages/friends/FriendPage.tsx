@@ -9,6 +9,7 @@ import AlbumCard from '../../components/AlbumCard';
 import Loading from '../../components/Loading';
 
 const CurrentSection = ({ friend_username, schedules }: { friend_username: string, schedules: Array<ISchedule> }) => {
+  const { setOpenScheduleModal } = useContext(AuthContext)
   return (
     <>
       <div className='mt-1 mb-4'>
@@ -21,7 +22,7 @@ const CurrentSection = ({ friend_username, schedules }: { friend_username: strin
               <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
                 <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!</p>
               </div>
-              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
+              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 ' onClick={() => setOpenScheduleModal(true)}>Add album to review</button>
             </div>
           </>
         }
@@ -51,7 +52,7 @@ const ArchiveSection = ({ schedules }: { schedules: Array<ISchedule> }) => {
 
 
 const FriendPage = () => {
-  const { isId } = useContext(AuthContext)
+  const { isId, setOpenScheduleModal } = useContext(AuthContext)
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
   const [friendImg, setFriendImg] = useState<string>();

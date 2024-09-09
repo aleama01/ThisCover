@@ -113,7 +113,21 @@ export const getSearchResults = async (name) => {
   const firstEncodedName = encodeURIComponent(name);
   const secondEncodedName = encodeURIComponent(firstEncodedName);
 
+  const albumsResult = new Array;
   const response = await search(secondEncodedName);
   const item = await response.json()
-  return item
+  for (let el of item.albums.items) {
+    const album = {
+      id: el.id,
+      title: el.name,
+      artists: el.artists.map((_artist) => ({
+        name: _artist.name
+      })
+      ),
+      image: el.images[0].url,
+    }
+    albumsResult.push(album)
+  }
+
+  return albumsResult
 } 

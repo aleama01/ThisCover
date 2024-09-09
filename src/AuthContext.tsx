@@ -8,6 +8,8 @@ export interface IContext {
   setIsId: (config: string) => void;
   reload: boolean;
   setReload: (config: boolean) => void;
+  openScheduleModal: boolean;
+  setOpenScheduleModal: (config: boolean) => void;
 };
 
 // Create Auth Context
@@ -19,6 +21,8 @@ export const AuthContext = createContext<IContext>({
   setIsId(_config) { },
   reload: false,
   setReload(_config) { },
+  openScheduleModal: false,
+  setOpenScheduleModal(_config) { },
 });
 
 const AuthProvider = ({ children }: any) => {
@@ -26,6 +30,7 @@ const AuthProvider = ({ children }: any) => {
   const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
   const [isId, setIsId] = useState<string>(sessionStorage.getItem('id')!);
   const [reload, setReload] = useState(false);
+  const [openScheduleModal, setOpenScheduleModal] = useState(false);
 
   useEffect(() => {
     // Check if token exists in sessionStorage to set the initial auth state
@@ -54,7 +59,7 @@ const AuthProvider = ({ children }: any) => {
   if (isCheckingAuth) return null;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logout, isId, setIsId, reload, setReload }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logout, isId, setIsId, reload, setReload, openScheduleModal, setOpenScheduleModal }}>
       {children}
     </AuthContext.Provider>
   );

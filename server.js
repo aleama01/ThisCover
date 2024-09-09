@@ -127,6 +127,7 @@ app.post('/api/ratings', async (req, res) => {
 // Insert a schedule element into the database
 app.post('/api/schedule', async (req, res) => {
   const { user_id, date, friend_id, album_id } = req.body;
+  console.log(user_id, date, friend_id, album_id)
   try {
     const insertQuery = `
       INSERT INTO Schedule (user_id, deadline, friend_id, album_id, is_active)

@@ -204,6 +204,7 @@ button:focus {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  max-width: 100dvw;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   -ms-overflow-style: none;
@@ -334,4 +335,166 @@ button:focus {
   border-radius: 8px;
   padding: 2px;
   color: #f1f1f1;
+}
+
+.date-input {
+  background-color: transparent;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  padding: 2px;
+  color: #f1f1f1;
+}
+
+.album-rating-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+  text-overflow: '';
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 2px;
+  color: #f1f1f1;
+  border: 0px;
+}
+
+.album-rating-input option {
+  font-size: 14px;
+}
+
+.modal-rating {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 100;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #13131390;
+}
+
+.modal-rating-div {
+  background-color: #1f1f1f;
+  color: #ababab;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 24px;
+}
+
+.modal-add-schedule {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 10000;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #13131390;
+}
+
+.modal-add-schedule-div {
+  background-color: #1f1f1f;
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  width: 90dvw;
+  height: 500px;
+  border-radius: 24px;
+  padding: 5px 20px;
+}
+
+.search-album-results-gallery {
+  height: 340px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-top: 30px;
+  margin-top: -20px;
+  background-color: #131313;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+
+}
+
+.search-friends-results-gallery {
+  height: 240px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-top: 30px;
+  margin-top: -20px;
+  background-color: #131313;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+
+}
+
+.search-album-results-gallery::-webkit-scrollbar {
+  width: 0px;
+}
+
+
+.search-album-result {
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  transition-duration: 300ms;
+}
+
+.search-friend-result {
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 0 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  transition-duration: 300ms;
+}
+
+.result-selected {
+  background-color: #1f1f1f;
+}
+
+.search-album-result-img {
+  margin: 0 10px;
+}
+
+.search-friend-result-img {
+  border-radius: 1000px;
+  object-fit: cover;
+  margin: 0 10px;
+}
+
+.searchbar {
+  border-color: #ababab;
+}
+
+.recap-album {
+  height: 100px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
+.schedule-recap {
+  height: 400px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 }

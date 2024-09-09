@@ -15,10 +15,8 @@ const Homepage = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        console.log(isId)
         if (!isId) return;
         const response = await axios.get(`http://localhost:3000/api/schedules/${isId}`);
-        console.log(response.data)
         if (response.data) {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {

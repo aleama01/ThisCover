@@ -7,6 +7,25 @@ import Layout from '../../components/Layout'
 import { IAlbum, IRating, ISong } from '../../interfaces';
 import { getAlbumSongs, getOneAlbum } from '../../lib/spotify-get-token';
 
+const ModalSaveRatings = ({ closeModal }: { closeModal: Function }) => {
+  return (
+    <div className='modal-rating'>
+      <div className='p-4 modal-rating-div position-relative'>
+        <svg className="position-absolute top-0 end-0 m-2" onClick={() => closeModal(false)} width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fillRule="evenodd" clipRule="evenodd" d="M14.5 13.2071L21.4104 6.29542C21.5869 6.119 21.8201 6.03079 22.0521 6.03079C22.5402 6.03079 22.9583 6.42229 22.9583 6.93583C22.9583 7.16904 22.8701 7.40104 22.6937 7.57867L15.782 14.4891L22.6925 21.3996C22.8701 21.5772 22.9583 21.8092 22.9583 22.0412C22.9583 22.5572 22.5366 22.9475 22.0521 22.9475C21.8201 22.9475 21.5869 22.8593 21.4104 22.6828L14.5 15.7724L7.58953 22.6828C7.41311 22.8593 7.17991 22.9475 6.94791 22.9475C6.46336 22.9475 6.04166 22.5572 6.04166 22.0412C6.04166 21.8092 6.12986 21.5772 6.30749 21.3996L13.2179 14.4891L6.30628 7.57867C6.12986 7.40104 6.04166 7.16904 6.04166 6.93583C6.04166 6.42229 6.45974 6.03079 6.94791 6.03079C7.17991 6.03079 7.41311 6.119 7.58953 6.29542L14.5 13.2071Z" fill="#F1F1F1" />
+        </svg>
+
+        <svg className="my-3" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24.995 0.0125122C38.7875 0.0125122 49.9875 11.2125 49.9875 25.005C49.9875 38.8 38.7875 50 24.995 50C11.2 50 0 38.8 0 25.005C0 11.2125 11.2 0.0125122 24.995 0.0125122ZM24.995 3.76251C13.27 3.76251 3.75 13.28 3.75 25.005C3.75 36.73 13.27 46.25 24.995 46.25C36.72 46.25 46.2375 36.73 46.2375 25.005C46.2375 13.28 36.72 3.76251 24.995 3.76251ZM12.3725 25.9775L22 34.5525C22.355 34.8725 22.8025 35.0275 23.2475 35.0275C23.7525 35.0275 24.26 34.825 24.6275 34.4225L39.51 18.15C39.8375 17.7925 40 17.3425 40 16.895C40 15.87 39.1725 15.0275 38.13 15.0275C37.62 15.0275 37.1175 15.2325 36.745 15.635L23.1125 30.54L14.8675 23.195C14.5075 22.8775 14.065 22.72 13.62 22.72C12.5825 22.72 11.75 23.5575 11.75 24.585C11.75 25.0975 11.96 25.6075 12.3725 25.9775Z" fill="#F1F1F1" />
+        </svg>
+
+        <div>
+          Ratings saved successfully!
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const Tracklist = ({ onRatingChange, yourRatings, friendRatings, songs }: { onRatingChange: Function, yourRatings: Array<IRating>, friendRatings: Array<IRating>, songs: Array<ISong> }) => {
   return (
@@ -57,6 +76,9 @@ const RatingPage = () => {
   const [songsData, setSongsData] = useState<Array<ISong>>([]);
   const [ratingsData, setRatingsData] = useState<Array<IRating>>([]);
   const [friendRatingsData, setFriendRatingsData] = useState<Array<IRating>>([]);
+  const [comment, setComment] = useState('');
+  const [albumRating, setAlbumRating] = useState(0);
+  const [openModalRatings, setOpenModalRatings] = useState(false)
   const { id, friend_id, album_id } = useParams();
 
   useEffect(() => {
@@ -128,7 +150,9 @@ const RatingPage = () => {
               comment: el.comment
             })
           }
-
+          const ratingForSongZero = ratings_tmp.find((r: IRating) => r.song_id === '0');
+          setComment(ratingForSongZero?.comment || '');
+          setAlbumRating(ratingForSongZero?.rating || 0)
           setRatingsData(ratings_tmp);
         }
       } catch (error) {
@@ -155,7 +179,6 @@ const RatingPage = () => {
               comment: el.comment
             })
           }
-
           setFriendRatingsData(ratings_tmp);
         }
       } catch (error) {
@@ -169,9 +192,26 @@ const RatingPage = () => {
     fetchFriendRatings()
   }, [reload])
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+    let updatedRatings = new Array<IRating>;
+    if (ratingsData.filter(r => r.song_id === "0").length == 0) {
+      let rating: IRating = {
+        user_id: parseInt(isId),
+        song_id: "0",
+        album_id: albumData!.id,
+        rating: albumRating,
+        comment: comment
+      }
+      updatedRatings.push(rating)
+    } else {
+      updatedRatings = ratingsData.map(r => (r.song_id === "0" ? { ...r, comment: comment } : r));
+    }
+
+    setRatingsData(updatedRatings);
+  };
 
   const handleRatingChange = (songId: string, newRating: number) => {
-    console.log(songId, newRating)
     let updatedRatings = new Array<IRating>;
     if (ratingsData.filter(r => r.song_id === songId).length == 0) {
       let rating: IRating = {
@@ -179,21 +219,23 @@ const RatingPage = () => {
         song_id: songId,
         album_id: albumData!.id,
         rating: newRating,
+        comment: songId == "0" ? comment : ""
       }
       updatedRatings.push(rating)
     } else {
       updatedRatings = ratingsData.map(r => (r.song_id === songId ? { ...r, rating: newRating } : r));
     }
-    console.log(ratingsData, updatedRatings)
+
     setRatingsData(updatedRatings);
   };
 
   const handleSave = async () => {
     const userId = isId;
-
     try {
-      console.log(ratingsData)
       for (const rating of ratingsData) {
+        if (rating.song_id === '0') {
+          rating.comment = comment;
+        }
         await axios.post('http://localhost:3000/api/ratings', {
           userId,
           albumId: rating.album_id,
@@ -202,17 +244,19 @@ const RatingPage = () => {
           comment: rating.comment || ""
         });
       }
-      console.log("Inserted rating")
     } catch (error) {
       console.error('Error saving ratings:', error);
     }
-    setReload(!reload)
+    setReload(!reload);
+    setOpenModalRatings(true);
+    setTimeout(() => setOpenModalRatings(false), 3500);
   };
 
   return (
     <Layout>
+      {openModalRatings ? <ModalSaveRatings closeModal={setOpenModalRatings} /> : <></>}
       <div className='d-flex flex-row justify-content-start' style={{ marginTop: "10dvh", padding: "0 25px" }}>
-        <img src={albumData?.image} width={160} height={160} className="object-fit-cover" style={{ backgroundColor: "#6d6d6d", borderRadius: "24px" }}></img>
+        <img src={albumData?.image} width={160} height={160} className="object-fit-cover" style={{ backgroundColor: "#6d6d6d", borderRadius: "24px", objectFit: "cover" }}></img>
         <div className='d-flex flex-column' style={{ paddingLeft: "1rem" }}>
           <div className='fw-300 fs-12 text-gray'>Title</div>
           <h4 className='fw-400 fs-14'>{albumData?.title}</h4>
@@ -228,19 +272,32 @@ const RatingPage = () => {
         <div className='d-flex'>
           <div className='col-3 d-flex flex-column justify-content-start align-items-center'>
             <div className='rating-number mb-1'>
-              9
+              <select
+                className="album-rating-input"
+                value={ratingsData.find((r) => r.song_id === "0")?.rating}
+                onChange={(e) => handleRatingChange("0", parseFloat(e.target.value))}
+              >
+                {[...Array(21).keys()].map(i => (
+                  <option key={i} value={i / 2}>
+                    {i / 2}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className='fs-10 text-gray'>
               Tap to change
             </div>
           </div>
-          <textarea className='col-9 comment-input' placeholder='Add your comment...'></textarea>
+          <textarea className='col-9 comment-input' placeholder='Add your comment...' value={comment}
+            onChange={handleCommentChange}>
+            {comment ? comment : ""}
+          </textarea>
         </div>
       </div>
 
       <Tracklist onRatingChange={handleRatingChange} yourRatings={ratingsData} friendRatings={friendRatingsData} songs={songsData} />
 
-      <div className='w-100 d-flex flex-column fs-18 mt-3' style={{ padding: "0 25px" }}>
+      <div className='w-100 d-flex flex-column fs-18 mb-4 mt-3' style={{ padding: "0 25px" }}>
         <button type='button' className='btn-accent w-100 fw-300 py-2 position-relative' onClick={handleSave}>
           <svg className='position-absolute start-5' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 20.25C19 19.848 18.644 19.5 18.25 19.5C15.689 19.5 6.311 19.5 3.75 19.5C3.356 19.5 3 19.848 3 20.25C3 20.652 3.356 21 3.75 21H18.25C18.644 21 19 20.652 19 20.25ZM6.977 13.167C5.643 17.083 5.497 17.399 5.497 17.754C5.497 18.281 5.957 18.503 6.246 18.503C6.598 18.503 6.914 18.366 10.82 17.01L6.977 13.167ZM8.037 12.106L11.883 15.952L20.707 7.138C20.902 6.943 21 6.687 21 6.431C21 6.176 20.902 5.92 20.707 5.725C20.015 5.034 18.965 3.984 18.272 3.293C18.077 3.098 17.821 3 17.565 3C17.311 3 17.055 3.098 16.859 3.293L8.037 12.106Z" fill="#F1F1F1" />
@@ -249,7 +306,7 @@ const RatingPage = () => {
         </button>
 
 
-        <a target="_blank" rel="noopener noreferrer" className='w-100' href={""}>
+        <a target="_blank" rel="noopener noreferrer" className='w-100' href={albumData?.url}>
           <button type='button' className='btn-black w-100 fw-300 py-2 mt-1 position-relative'>
             <svg width="24" height="24" viewBox="0 0 20 21" fill="none" className='position-absolute start-5' xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M15.915 8.93686C12.6917 7.02562 7.375 6.85005 4.2975 7.78279C3.80333 7.93256 3.28083 7.65382 3.13167 7.16041C2.98167 6.667 3.26 6.14529 3.755 5.99552C7.2875 4.92466 13.1592 5.13184 16.87 7.33098C17.3142 7.59475 17.46 8.1672 17.1967 8.61069C16.9333 9.05418 16.3592 9.20062 15.915 8.93686ZM15.81 11.7684C15.5833 12.1345 15.1042 12.2493 14.7375 12.0246C12.05 10.3755 7.9525 9.89706 4.7725 10.8606C4.36083 10.9854 3.925 10.7533 3.8 10.3422C3.67583 9.93034 3.90833 9.49684 4.32 9.3712C7.95167 8.27121 12.4667 8.80373 15.5533 10.6983C15.92 10.923 16.035 11.4031 15.81 11.7684ZM14.5858 14.4867C14.4067 14.7813 14.0225 14.8736 13.7292 14.6939C11.3808 13.2611 8.425 12.9374 4.94417 13.7312C4.60917 13.8078 4.275 13.5981 4.19833 13.2636C4.12167 12.9283 4.33083 12.5946 4.66667 12.5181C8.47583 11.6486 11.7433 12.023 14.3792 13.6314C14.6733 13.8102 14.7658 14.1938 14.5858 14.4867ZM10 0.0853882C4.4775 0.0853882 0 4.55606 0 10.0701C0 15.585 4.4775 20.0549 10 20.0549C15.5233 20.0549 20 15.585 20 10.0701C20 4.55606 15.5233 0.0853882 10 0.0853882Z" fill="#F1F1F1" />
