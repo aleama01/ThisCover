@@ -5,7 +5,7 @@ import { AuthContext } from '../AuthContext';
 import { timeLeft } from '../functions'
 import { IAlbum, IUser } from '../interfaces'
 
-const AlbumCard = ({ album, friendId, deadline, is_active }: { album: IAlbum, friendId: number, deadline: Date, is_active: boolean }) => {
+const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IAlbum, friendId: number, userId: number, deadline: Date, is_active: boolean }) => {
   const [friendUsername, setFriendUsername] = useState<string>()
   const { isId } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AlbumCard = ({ album, friendId, deadline, is_active }: { album: IAlbum, fr
   }, []);
 
   const handleClick = () => {
-    navigate(`/rating/${isId}/${friendId}/${album.id}/${is_active}`)
+    navigate(`/rating/${isId}/${parseInt(isId) === friendId ? userId : friendId}/${album.id}/${is_active}`)
   }
 
   return (

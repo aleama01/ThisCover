@@ -227,8 +227,9 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
       }
     }
 
-    submitRating()
-    setOpenScheduleModal(false)
+    submitRating();
+    setReload(!reload);
+    setOpenScheduleModal(false);
   }
 
   return (

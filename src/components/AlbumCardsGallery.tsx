@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { URL } from 'url'
+import { AuthContext } from '../AuthContext'
 import { IAlbum, ISchedule } from '../interfaces'
 import AlbumCard from './AlbumCard'
 
 const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
   const galleryRef = useRef<HTMLDivElement | null>(null);
+  const { setOpenScheduleModal } = useContext(AuthContext)
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Function to handle scroll event
@@ -34,7 +36,7 @@ const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
         {schedules.length > 0 ?
           schedules.map((schedule, index) => (
             <div className="album-card-container" key={index}>
-              <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} is_active={schedule.is_active} />
+              <AlbumCard album={schedule.album} friendId={schedule.friend_id} userId={schedule.user_id} deadline={schedule.deadline} is_active={schedule.is_active} />
             </div>
           ))
           :
@@ -42,7 +44,7 @@ const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
             <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
               <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!<br /> You can add one from a friend's page or from below</p>
             </div>
-            <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
+            <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 ' onClick={() => setOpenScheduleModal(true)}>Add album to review</button>
           </div>
         }
       </div>

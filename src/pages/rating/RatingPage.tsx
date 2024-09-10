@@ -45,18 +45,21 @@ const Tracklist = ({ onRatingChange, yourRatings, friendRatings, songs, is_activ
               <div className='fs-16 fw-300 d-flex flex-row my-3' key={index}>
                 <div className='col-8'>{song.track_number}. {song.name}</div>
                 <div className='col-2 text-center'>
-                  <select
-                    className="song-rating-input"
-                    disabled={is_active === "true" ? false : true}
-                    value={yourRatings.find((r) => r.song_id == song.id)?.rating}
-                    onChange={(e) => onRatingChange(song.id, parseFloat(e.target.value))}
-                  >
-                    {[...Array(21).keys()].map(i => (
-                      <option key={i} value={i / 2}>
-                        {i / 2}
-                      </option>
-                    ))}
-                  </select>
+                  {is_active === "true" ?
+                    <select
+                      className="song-rating-input"
+                      disabled={is_active === "true" ? false : true}
+                      value={yourRatings.find((r) => r.song_id == song.id)?.rating}
+                      onChange={(e) => onRatingChange(song.id, parseFloat(e.target.value))}
+                    >
+                      {[...Array(21).keys()].map(i => (
+                        <option key={i} value={i / 2}>
+                          {i / 2}
+                        </option>
+                      ))}
+                    </select> :
+                    yourRatings.find((r) => r.song_id == song.id) ? yourRatings.find((r) => r.song_id == song.id)!.rating : 0
+                  }
                 </div>
                 <div className='col-2 mx-1 text-center'>
                   {friendRatings.find((r) => r.song_id == song.id) ? friendRatings.find((r) => r.song_id == song.id)!.rating : 0}
@@ -334,7 +337,7 @@ const RatingPage = () => {
                   <div className='fs-12'><span className='fs-24'>{albumRating === -1 ? "-" : albumRating}</span>/10</div>
                 </div>
                 <div className='p-1 fs-12 text-end'>
-                  {comment === "" ? "No comment left" : comment}
+                  {comment === "" ? <span className='text-gray'>No comment left</span> : comment}
                 </div>
               </div>
 
@@ -344,7 +347,7 @@ const RatingPage = () => {
                   <img src={friend?.image_url} width={40} height={40} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
                 </div>
                 <div className='p-1 fs-12 text-start'>
-                  {friendComment === "" ? "No comment left" : friendComment}
+                  {friendComment === "" ? <span className='text-gray'>No comment left</span> : friendComment}
                 </div>
               </div>
             </div>

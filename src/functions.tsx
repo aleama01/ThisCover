@@ -9,7 +9,7 @@ export function timeLeft(targetDate: Date): string {
   const timeDifference = adjustedTargetDate.getTime() - now.getTime();
 
   if (timeDifference <= 0) {
-    return "The date has passed!";
+    return "-1";
   }
 
   // Calculate the number of days and hours left

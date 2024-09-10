@@ -164,9 +164,8 @@ app.get('/api/schedules/:userId', async (req, res) => {
       WHEN friend_id = $1 THEN user_id
       END AS selected_id
       FROM Schedule 
-      WHERE (user_id = $1 OR friend_id = $1) 
-      AND is_active = $2`,
-      [userId, true]);
+      WHERE (user_id = $1 OR friend_id = $1)`,
+      [userId]);
 
     res.json(result.rows);
   } catch (error) {
@@ -176,15 +175,15 @@ app.get('/api/schedules/:userId', async (req, res) => {
 });
 
 // Update the is_active status of a schedule
-app.put('/api/schedules/:userId/:deadline', async (req, res) => {
-  const { userId, deadline } = req.params; // Assuming weekId uniquely identifies the schedule with the userId
+app.put('/api/schedules/:userId/:albumId', async (req, res) => {
+  const { userId, albumId } = req.params;
   const { isActive } = req.body; // Get the new isActive status from the request body
-
+  console.log(userId, albumId, isActive)
   try {
     // Update the is_active status of the schedule entry
     const result = await pool.query(
-      'UPDATE Schedule SET is_active = $1 WHERE user_id = $2 AND deadline = $3 RETURNING *',
-      [isActive, userId, deadline]
+      'UPDATE Schedule SET is_active = $1 WHERE user_id = $2 AND album_id = $3 RETURNING *',
+      [isActive, userId, albumId]
     );
 
     // Check if the update affected any rows
@@ -204,6 +203,19 @@ app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
     const result = await pool.query('SELECT username,image_url FROM Users WHERE id = $1', [userId]);
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error fetching schedules:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+)
+
+// Get user from id
+app.get('/api/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM Users WHERE id = $1', [userId]);
     res.json(result.rows[0]);
   } catch (error) {
     console.error('Error fetching schedules:', error.message);

@@ -109,8 +109,8 @@ const Account = () => {
 
       <div className='mt-1 mb-4'>
         <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>History</h4>
-        {schedules && schedules.filter(s => s.is_active).length > 0 ?
-          schedules.filter(s => s.is_active).map((schedule, index) => {
+        {schedules && schedules.filter(s => !s.is_active).length > 0 ?
+          schedules.filter(s => !s.is_active).map((schedule, index) => {
             return (
               <AlbumHistoryCard album={schedule.album} deadline={schedule.deadline} rating={albumRating!.filter(r => r.album_id === schedule.album.id).length > 0 ? albumRating?.filter(r => r.album_id === schedule.album.id)[0].rating : -1} friendId={schedule.friend_id} key={index} />
             )

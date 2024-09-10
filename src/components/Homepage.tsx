@@ -6,11 +6,12 @@ import { IAlbum, ISchedule } from '../interfaces'
 import { getAlbums, getOneAlbum } from '../lib/spotify-get-token'
 import Loading from './Loading'
 import { AuthContext } from '../AuthContext'
+import { timeLeft } from '../functions'
 
 const Homepage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>();
-  const { isId } = useContext(AuthContext)
+  const { isId, setIsId, setReload, reload, setOpenScheduleModal } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -21,24 +22,34 @@ const Homepage = () => {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {
             const album: any = await getOneAlbum(el.album_id)
-            schedules_tmp.push({
-              album: {
-                id: album.id,
-                title: album.title,
-                release_date: album.release_date,
-                artists: album.artists,
-                image: album.image,
-                tags: album.tags,
-                url: album.url
-              },
-              deadline: el.deadline,
-              friend_id: el.selected_id,
-              user_id: el.user_id,
-              is_active: el.is_active
-            })
-          }
+            if (timeLeft(el.deadline) === "-1" && el.is_active == true) {
+              try {
+                const res = await axios.put(`http://localhost:3000/api/schedules/${isId}/${album.id}`, { isActive: false })
+                console.log("Updated state successfully");
+              } catch (error) {
+                console.error('Error changing to inactive:', error);
+              }
+              break
+            } else if (timeLeft(el.deadline) != "-1") {
+              schedules_tmp.push({
+                album: {
+                  id: album.id,
+                  title: album.title,
+                  release_date: album.release_date,
+                  artists: album.artists,
+                  image: album.image,
+                  tags: album.tags,
+                  url: album.url
+                },
+                deadline: el.deadline,
+                friend_id: el.selected_id,
+                user_id: el.user_id,
+                is_active: el.is_active
+              })
+            }
 
-          setSchedules(schedules_tmp);
+            setSchedules(schedules_tmp);
+          }
           setLoading(false)
         }
       } catch (error) {
@@ -47,7 +58,8 @@ const Homepage = () => {
     };
 
     fetchSchedules();
-  }, [isId]);
+    //   setTimeout(() => setReload(!reload), 300)
+  }, []);
 
   return (
     <Layout>
@@ -63,7 +75,7 @@ const Homepage = () => {
               <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
                 <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!<br /> You can add one from a friend's page or from below</p>
               </div>
-              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
+              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 ' onClick={() => setOpenScheduleModal(true)}>Add album to review</button>
             </div>
         }
       </div>

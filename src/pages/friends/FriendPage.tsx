@@ -2,18 +2,19 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from '../../components/Layout';
-import { ISchedule } from '../../interfaces';
+import { IRating, ISchedule, IUser } from '../../interfaces';
 import { getOneAlbum } from '../../lib/spotify-get-token';
 import { AuthContext } from '../../AuthContext';
 import AlbumCard from '../../components/AlbumCard';
 import Loading from '../../components/Loading';
+import AlbumHistoryCard from '../../components/AlbumHistoryCard';
 
 const CurrentSection = ({ friend_username, schedules }: { friend_username: string, schedules: Array<ISchedule> }) => {
   const { setOpenScheduleModal } = useContext(AuthContext)
   return (
     <div className='mt-1 mb-4'>
       {schedules.length > 0 ?
-        <AlbumCard album={schedules[0].album} friendId={schedules[0].friend_id} deadline={schedules[0].deadline} is_active={schedules[0].is_active} />
+        <AlbumCard album={schedules[0].album} friendId={schedules[0].friend_id} userId={schedules[0].user_id} deadline={schedules[0].deadline} is_active={schedules[0].is_active} />
         :
         <>
           <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>Current album</h4>
@@ -30,12 +31,47 @@ const CurrentSection = ({ friend_username, schedules }: { friend_username: strin
   )
 }
 
-const ArchiveSection = ({ schedules }: { schedules: Array<ISchedule> }) => {
+const ArchiveSection = ({ friend, schedules }: { friend: IUser, schedules: Array<ISchedule> }) => {
+  const [albumRatings, setAlbumRatings] = useState([{ id: "", rating: -1 }]);
+
+  useEffect(() => {
+    const fetchAlbumRating = async () => {
+      if (!schedules) return
+      try {
+        const albumRatings_tmp = [];
+        for (let schedule of schedules) {
+          const userId = friend.id;
+          const albumId = schedule.album.id;
+          const response = await axios.get(`http://localhost:3000/api/ratings/${userId}/${albumId}`);
+
+          if (response.data) {
+            const ratingForSongZero = response.data.find((r: IRating) => r.song_id === '0');
+            albumRatings_tmp.push({
+              id: albumId,
+              rating: ratingForSongZero.rating
+            })
+          }
+        }
+        setAlbumRatings(albumRatings_tmp)
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+      }
+
+
+    }
+
+    fetchAlbumRating()
+
+  }, [])
   return (
     <div className='mt-1 mb-4'>
       <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>History</h4>
-      {schedules.length > 0 ?
-        <></>
+      {schedules && schedules.filter(s => !s.is_active).length > 0 ?
+        schedules.filter(s => !s.is_active).map((schedule, index) => {
+          return (
+            <AlbumHistoryCard album={schedule.album} deadline={schedule.deadline} rating={albumRatings!.filter(r => r.id === schedule.album.id).length > 0 ? albumRatings?.filter(r => r.id === schedule.album.id)[0].rating : -1} friendId={friend.id} key={index} />
+          )
+        })
         :
         <p className='my-auto mx-auto fs-12 text-center px-2 my-4' style={{ color: "#6D6D6D" }}>You did not review any album yet!</p>
       }
@@ -49,7 +85,7 @@ const FriendPage = () => {
   const { isId, setOpenScheduleModal } = useContext(AuthContext)
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
-  const [friendImg, setFriendImg] = useState<string>();
+  const [friend, setFriend] = useState<IUser>();
   const [profileSec, setProfileSec] = useState<string>("current");
   const { friend_username, friend_id } = useParams();
   const navigate = useNavigate();
@@ -57,8 +93,9 @@ const FriendPage = () => {
   useEffect(() => {
     const fetchFriend = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/${friend_id}`);
-        setFriendImg(response.data.image_url)
+        const userId = friend_id
+        const response = await axios.get(`http://localhost:3000/api/user/${userId}`);
+        setFriend(response.data)
       } catch (error) {
         console.error('Error fetching schedule:', error);
       }
@@ -120,7 +157,7 @@ const FriendPage = () => {
       </div>
 
       <div className='text-center' style={{ marginTop: "7dvh" }}>
-        <img src={friendImg} width={80} height={80} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
+        <img src={friend?.image_url} width={80} height={80} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
         <h3 className='fs-14 fw-400 my-2'>{friend_username}</h3>
       </div>
 
@@ -132,7 +169,7 @@ const FriendPage = () => {
       {loading ? <Loading /> :
         profileSec == "current" ?
           <CurrentSection friend_username={friend_username!} schedules={schedules.filter(s => s.is_active)} />
-          : profileSec == "archive" && <ArchiveSection schedules={schedules.filter(s => !s.is_active)} />}
+          : profileSec == "archive" && <ArchiveSection friend={friend!} schedules={schedules.filter(s => !s.is_active)} />}
 
     </Layout>
   )

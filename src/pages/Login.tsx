@@ -8,7 +8,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, setIsId } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: any) => {
@@ -19,6 +19,7 @@ const Login = () => {
       // Save token to local storage or context
       sessionStorage.setItem('token', response.data.token);
       sessionStorage.setItem('id', response.data.id);
+      setIsId(response.data.id);
       setIsAuthenticated(true)
       navigate('/');
     } catch (error: any) {
