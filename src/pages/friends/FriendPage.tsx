@@ -11,42 +11,36 @@ import Loading from '../../components/Loading';
 const CurrentSection = ({ friend_username, schedules }: { friend_username: string, schedules: Array<ISchedule> }) => {
   const { setOpenScheduleModal } = useContext(AuthContext)
   return (
-    <>
-      <div className='mt-1 mb-4'>
-        {schedules.length > 0 ?
-          <AlbumCard album={schedules[0].album} friendId={schedules[0].friend_id} deadline={schedules[0].deadline} />
-          :
-          <>
-            <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>Current album</h4>
-            <div className='album-card py-4 my-2 mx-auto'>
-              <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
-                <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!</p>
-              </div>
-              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 ' onClick={() => setOpenScheduleModal(true)}>Add album to review</button>
+    <div className='mt-1 mb-4'>
+      {schedules.length > 0 ?
+        <AlbumCard album={schedules[0].album} friendId={schedules[0].friend_id} deadline={schedules[0].deadline} is_active={schedules[0].is_active} />
+        :
+        <>
+          <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>Current album</h4>
+          <div className='album-card py-4 my-2 mx-auto'>
+            <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
+              <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!</p>
             </div>
-          </>
-        }
+            <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 ' onClick={() => setOpenScheduleModal(true)}>Add album to review</button>
+          </div>
+        </>
+      }
 
-      </div>
-    </>
+    </div>
   )
 }
 
 const ArchiveSection = ({ schedules }: { schedules: Array<ISchedule> }) => {
   return (
-    <>
-      <div className='mt-1 mb-4'>
-        <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>History</h4>
-        {schedules.length > 0 ?
-          <></>
-          :
+    <div className='mt-1 mb-4'>
+      <h4 className='fs-16 fw-500 mt-1 mb-3' style={{ paddingLeft: "25px" }}>History</h4>
+      {schedules.length > 0 ?
+        <></>
+        :
+        <p className='my-auto mx-auto fs-12 text-center px-2 my-4' style={{ color: "#6D6D6D" }}>You did not review any album yet!</p>
+      }
 
-          <p className='my-auto mx-auto fs-12 text-center px-2 my-4' style={{ color: "#6D6D6D" }}>You did not review any album yet!</p>
-
-        }
-
-      </div>
-    </>
+    </div>
   )
 }
 
@@ -114,6 +108,7 @@ const FriendPage = () => {
   const handleGoBack = () => {
     navigate(-1)
   }
+
   return (
     <Layout>
       <div className='position-absolute top-0 start-0 mx-3 my-4'>
@@ -123,6 +118,7 @@ const FriendPage = () => {
           </svg>
         </button>
       </div>
+
       <div className='text-center' style={{ marginTop: "7dvh" }}>
         <img src={friendImg} width={80} height={80} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
         <h3 className='fs-14 fw-400 my-2'>{friend_username}</h3>
@@ -137,6 +133,7 @@ const FriendPage = () => {
         profileSec == "current" ?
           <CurrentSection friend_username={friend_username!} schedules={schedules.filter(s => s.is_active)} />
           : profileSec == "archive" && <ArchiveSection schedules={schedules.filter(s => !s.is_active)} />}
+
     </Layout>
   )
 }

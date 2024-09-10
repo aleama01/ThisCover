@@ -27,12 +27,6 @@ const Dashboard = () => {
       return;
     }
 
-    try {
-      const res = await getSearchResults(value);
-      setSearchResults(res.albums.items.slice(0, 10));
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
   }
 
   return (

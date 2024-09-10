@@ -22,3 +22,22 @@ export function timeLeft(targetDate: Date): string {
 
   return `${daysStr}${hoursStr}left`.trim();
 }
+
+export function getDate(dateString: string) {
+  // Create a Date object from the input string
+  const date = new Date(dateString);
+
+  // Get the day as a number
+  const day = date.getUTCDate(); // Using getUTCDate to avoid timezone differences
+
+  // Array of month names to convert the month number to string
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  // Get the month as a string
+  const month = monthNames[date.getUTCMonth()]; // getUTCMonth returns a zero-indexed month (0 = January)
+
+  return { day, month };
+}

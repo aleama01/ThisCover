@@ -2,7 +2,7 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand fixed-bottom p-3">
+    <nav className="navbar navbar-expand fixed-bottom">
       <div className='container-fluid'>
         <ul className="navbar-nav d-flex flex-row w-100 justify-content-around align-items-center">
 

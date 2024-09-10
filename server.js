@@ -224,6 +224,18 @@ app.get('/api/ratings/:userId/:albumId', async (req, res) => {
   }
 });
 
+// Get all rating elements for past albums
+app.get('/api/ratingshistory/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM Rating WHERE user_id = $1 AND song_id= $2', [userId, "0"]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching history ratings:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Insert a friend element into the database
 app.post('/api/friends', async (req, res) => {
   const { userId, friendId } = req.body;

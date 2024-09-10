@@ -54,15 +54,6 @@ const Step0 = ({ step, setStep, album, setAlbum }: { step: number, setStep: Func
                   <div className='fs-12 fw-400'>{res.title}</div>
                   <div className='fs-12 fw-300 text-gray'>{res.artists![0].name}</div>
                 </div>
-                {/*
-                <div className='px-3'>
-                  <div className='mx-auto my-auto'>
-                    <svg width="10" height="14" viewBox="0 0 19 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M0.5 0.849375L16.6707 13.5L0.5 26.1214L1.19637 27L18.5 13.5L1.18513 0L0.5 0.849375Z" fill="#F1F1F1" />
-                    </svg>
-                  </div>
-                </div>
-                */}
               </div>
               <hr className='text-gray w-75 mx-auto my-0' />
             </div>
@@ -80,7 +71,7 @@ const Step0 = ({ step, setStep, album, setAlbum }: { step: number, setStep: Func
 const Step1 = ({ step, setStep, album, friend, setFriend, friends }: { step: number, setStep: Function, album: any, friend: any, setFriend: Function, friends: Array<IUser> }) => {
   const { setOpenScheduleModal } = useContext(AuthContext)
   const [searchUser, setSearchUsers] = useState("");
-  const [searchResultsUsers, setSearchResultsUsers] = useState<Array<IUser>>([]);
+  const [searchResultsUsers, setSearchResultsUsers] = useState<Array<IUser>>(friends);
 
   const handleBack = () => {
     setFriend();
@@ -96,7 +87,7 @@ const Step1 = ({ step, setStep, album, friend, setFriend, friends }: { step: num
     setSearchUsers(value);
 
     if (value.trim() === "") {
-      setSearchResultsUsers([]); // Clear results if input is empty
+      setSearchResultsUsers(friends); // Clear results if input is empty
       return;
     }
 
@@ -105,8 +96,6 @@ const Step1 = ({ step, setStep, album, friend, setFriend, friends }: { step: num
       user.username.toLowerCase().includes(value)
     );
 
-    console.log(friends)
-    console.log(filteredUsers)
     // Set search results, limiting to the first 3 matches
     setSearchResultsUsers(filteredUsers.slice(0, 3));
   }

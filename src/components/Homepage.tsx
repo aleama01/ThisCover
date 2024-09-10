@@ -9,7 +9,7 @@ import { AuthContext } from '../AuthContext'
 
 const Homepage = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
+  const [schedules, setSchedules] = useState<Array<ISchedule>>();
   const { isId } = useContext(AuthContext)
 
   useEffect(() => {
@@ -39,6 +39,7 @@ const Homepage = () => {
           }
 
           setSchedules(schedules_tmp);
+          setLoading(false)
         }
       } catch (error) {
         console.error('Error fetching schedule:', error);
@@ -46,7 +47,6 @@ const Homepage = () => {
     };
 
     fetchSchedules();
-    setTimeout(() => setLoading(false), 600)
   }, [isId]);
 
   return (
@@ -56,9 +56,15 @@ const Homepage = () => {
       </h1>
       <div className='my-auto mx-auto'>
         {loading ? <Loading /> :
-          <Suspense fallback={<Loading />}>
+          schedules ?
             <AlbumCardsGallery schedules={schedules} />
-          </Suspense>
+            :
+            <div className='album-card py-4'>
+              <div className='empty-album-img d-flex flex-row justify-content-center align-items-center'>
+                <p className='my-auto mx-auto fs-12 text-center px-2' style={{ color: "#6D6D6D" }}>You have no albums to review!<br /> You can add one from a friend's page or from below</p>
+              </div>
+              <button type='button' className='btn-black fs-14 w-100 mt-4 px-3 '>Add album to review</button>
+            </div>
         }
       </div>
     </Layout>

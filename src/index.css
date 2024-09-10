@@ -144,6 +144,10 @@ button:focus {
   font-size: 20px;
 }
 
+.fs-24 {
+  font-size: 24px;
+}
+
 .fw-100 {
   font-weight: 100;
 }
@@ -438,6 +442,10 @@ button:focus {
   width: 0px;
 }
 
+.search-friends-results-gallery::-webkit-scrollbar {
+  width: 0px;
+}
+
 
 .search-album-result {
   height: 100px;
@@ -497,4 +505,21 @@ button:focus {
   flex-direction: column;
   justify-content: start;
   align-items: center;
+}
+
+.album-history-card {
+  background-color: #131313;
+  width: 100dvw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 25px 13px 25px;
+}
+
+.album-history-card-image {
+  border-radius: 12px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -20,7 +20,7 @@ function App() {
         <Route path='/friends' element={<Friends />} />
         <Route path='/account' element={<Account />} />
         <Route path='/friends/:friend_username/:friend_id' element={<FriendPage />} />
-        <Route path='/rating/:user_id/:friend_id/:album_id' element={<RatingPage />} />
+        <Route path='/rating/:user_id/:friend_id/:album_id/:is_active' element={<RatingPage />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />

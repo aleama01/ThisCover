@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { text } from 'stream/consumers'
 import { AuthContext } from '../../AuthContext';
 import Layout from '../../components/Layout'
-import { IAlbum, IRating, ISong } from '../../interfaces';
+import { IAlbum, IRating, ISong, IUser } from '../../interfaces';
 import { getAlbumSongs, getOneAlbum } from '../../lib/spotify-get-token';
 
 const ModalSaveRatings = ({ closeModal }: { closeModal: Function }) => {
@@ -27,7 +27,7 @@ const ModalSaveRatings = ({ closeModal }: { closeModal: Function }) => {
   )
 }
 
-const Tracklist = ({ onRatingChange, yourRatings, friendRatings, songs }: { onRatingChange: Function, yourRatings: Array<IRating>, friendRatings: Array<IRating>, songs: Array<ISong> }) => {
+const Tracklist = ({ onRatingChange, yourRatings, friendRatings, songs, is_active }: { onRatingChange: Function, yourRatings: Array<IRating>, friendRatings: Array<IRating>, songs: Array<ISong>, is_active: string }) => {
   return (
     <>
       <h4 className='fw-400 fs-14 my-3' style={{ padding: "0 25px" }}>Tracklist</h4>
@@ -47,6 +47,7 @@ const Tracklist = ({ onRatingChange, yourRatings, friendRatings, songs }: { onRa
                 <div className='col-2 text-center'>
                   <select
                     className="song-rating-input"
+                    disabled={is_active === "true" ? false : true}
                     value={yourRatings.find((r) => r.song_id == song.id)?.rating}
                     onChange={(e) => onRatingChange(song.id, parseFloat(e.target.value))}
                   >
@@ -77,9 +78,13 @@ const RatingPage = () => {
   const [ratingsData, setRatingsData] = useState<Array<IRating>>([]);
   const [friendRatingsData, setFriendRatingsData] = useState<Array<IRating>>([]);
   const [comment, setComment] = useState('');
+  const [friendComment, setFriendComment] = useState('');
   const [albumRating, setAlbumRating] = useState(0);
-  const [openModalRatings, setOpenModalRatings] = useState(false)
-  const { id, friend_id, album_id } = useParams();
+  const [friendAlbumRating, setFriendAlbumRating] = useState(0);
+  const [openModalRatings, setOpenModalRatings] = useState(false);
+  const [user, setUser] = useState<IUser>()
+  const [friend, setFriend] = useState<IUser>()
+  const { id, friend_id, album_id, is_active } = useParams();
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -103,11 +108,6 @@ const RatingPage = () => {
         console.error('Error fetching album data:', error);
       }
     };
-
-    fetchAlbumData();
-  }, [isId]);
-
-  useEffect(() => {
     const fetchAlbumSongs = async () => {
       try {
         if (!isId) return;
@@ -130,6 +130,29 @@ const RatingPage = () => {
     };
 
     fetchAlbumSongs();
+    fetchAlbumData();
+  }, [isId]);
+
+  useEffect(() => {
+    const fetchFriend = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/users/${friend_id}`);
+        setFriend(response.data)
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+      }
+    };
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/users/${isId}`);
+        setUser(response.data)
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+      }
+    };
+
+    fetchUser();
+    fetchFriend();
   }, [isId]);
 
   useEffect(() => {
@@ -152,7 +175,7 @@ const RatingPage = () => {
           }
           const ratingForSongZero = ratings_tmp.find((r: IRating) => r.song_id === '0');
           setComment(ratingForSongZero?.comment || '');
-          setAlbumRating(ratingForSongZero?.rating || 0)
+          setAlbumRating(ratingForSongZero?.rating || -1)
           setRatingsData(ratings_tmp);
         }
       } catch (error) {
@@ -179,6 +202,9 @@ const RatingPage = () => {
               comment: el.comment
             })
           }
+          const ratingForSongZero = ratings_tmp.find((r: IRating) => r.song_id === '0');
+          setFriendComment(ratingForSongZero?.comment || '');
+          setFriendAlbumRating(ratingForSongZero?.rating || -1)
           setFriendRatingsData(ratings_tmp);
         }
       } catch (error) {
@@ -255,6 +281,7 @@ const RatingPage = () => {
   return (
     <Layout>
       {openModalRatings ? <ModalSaveRatings closeModal={setOpenModalRatings} /> : <></>}
+
       <div className='d-flex flex-row justify-content-start' style={{ marginTop: "10dvh", padding: "0 25px" }}>
         <img src={albumData?.image} width={160} height={160} className="object-fit-cover" style={{ backgroundColor: "#6d6d6d", borderRadius: "24px", objectFit: "cover" }}></img>
         <div className='d-flex flex-column' style={{ paddingLeft: "1rem" }}>
@@ -268,37 +295,67 @@ const RatingPage = () => {
       </div>
 
       <div style={{ padding: "0 25px" }}>
-        <h4 className='fs-16 fw-500 mt-3 mb-3'>Your review of the album</h4>
-        <div className='d-flex'>
-          <div className='col-3 d-flex flex-column justify-content-start align-items-center'>
-            <div className='rating-number mb-1'>
-              <select
-                className="album-rating-input"
-                value={ratingsData.find((r) => r.song_id === "0")?.rating}
-                onChange={(e) => handleRatingChange("0", parseFloat(e.target.value))}
-              >
-                {[...Array(21).keys()].map(i => (
-                  <option key={i} value={i / 2}>
-                    {i / 2}
-                  </option>
-                ))}
-              </select>
+        {is_active === "true" ?
+          <>
+            <h4 className='fs-16 fw-500 mt-3 mb-3'>Your review of the album</h4>
+            <div className='d-flex'>
+              <div className='col-3 d-flex flex-column justify-content-start align-items-center'>
+                <div className='rating-number mb-1'>
+                  <select
+                    className="album-rating-input"
+                    value={ratingsData.find((r) => r.song_id === "0")?.rating}
+                    onChange={(e) => handleRatingChange("0", parseFloat(e.target.value))}
+                  >
+                    {[...Array(21).keys()].map(i => (
+                      <option key={i} value={i / 2}>
+                        {i / 2}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className='fs-10 text-gray'>
+                  Tap to change
+                </div>
+              </div>
+              <textarea className='col-9 comment-input' placeholder='Add your comment...' value={comment}
+                onChange={handleCommentChange}>
+                {comment ? comment : ""}
+              </textarea>
             </div>
-            <div className='fs-10 text-gray'>
-              Tap to change
+          </>
+          :
+          <>
+            <h4 className='fs-16 fw-500 mt-3 mb-3'>Reviews of the album</h4>
+            <div className='d-flex'>
+
+              <div className='d-flex flex-column col-6 pe-1' style={{ borderRight: "1px solid #ababab" }}>
+                <div className='d-flex justify-content-between'>
+                  <img src={user?.image_url} width={40} height={40} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
+                  <div className='fs-12'><span className='fs-24'>{albumRating === -1 ? "-" : albumRating}</span>/10</div>
+                </div>
+                <div className='p-1 fs-12 text-end'>
+                  {comment === "" ? "No comment left" : comment}
+                </div>
+              </div>
+
+              <div className='d-flex flex-column col-6 ps-1'>
+                <div className='d-flex justify-content-between'>
+                  <div className='fs-12'><span className='fs-24'>{friendAlbumRating === -1 ? "-" : friendAlbumRating}</span>/10</div>
+                  <img src={friend?.image_url} width={40} height={40} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
+                </div>
+                <div className='p-1 fs-12 text-start'>
+                  {friendComment === "" ? "No comment left" : friendComment}
+                </div>
+              </div>
             </div>
-          </div>
-          <textarea className='col-9 comment-input' placeholder='Add your comment...' value={comment}
-            onChange={handleCommentChange}>
-            {comment ? comment : ""}
-          </textarea>
-        </div>
+          </>
+        }
       </div>
 
-      <Tracklist onRatingChange={handleRatingChange} yourRatings={ratingsData} friendRatings={friendRatingsData} songs={songsData} />
+      <Tracklist onRatingChange={handleRatingChange} yourRatings={ratingsData} friendRatings={friendRatingsData} songs={songsData} is_active={is_active!} />
 
       <div className='w-100 d-flex flex-column fs-18 mb-4 mt-3' style={{ padding: "0 25px" }}>
-        <button type='button' className='btn-accent w-100 fw-300 py-2 position-relative' onClick={handleSave}>
+        <button type='button' className='btn-accent w-100 fw-300 py-2 position-relative' onClick={handleSave} style={{ display: is_active === "true" ? "block" : "none" }}>
           <svg className='position-absolute start-5' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 20.25C19 19.848 18.644 19.5 18.25 19.5C15.689 19.5 6.311 19.5 3.75 19.5C3.356 19.5 3 19.848 3 20.25C3 20.652 3.356 21 3.75 21H18.25C18.644 21 19 20.652 19 20.25ZM6.977 13.167C5.643 17.083 5.497 17.399 5.497 17.754C5.497 18.281 5.957 18.503 6.246 18.503C6.598 18.503 6.914 18.366 10.82 17.01L6.977 13.167ZM8.037 12.106L11.883 15.952L20.707 7.138C20.902 6.943 21 6.687 21 6.431C21 6.176 20.902 5.92 20.707 5.725C20.015 5.034 18.965 3.984 18.272 3.293C18.077 3.098 17.821 3 17.565 3C17.311 3 17.055 3.098 16.859 3.293L8.037 12.106Z" fill="#F1F1F1" />
           </svg>

@@ -12,7 +12,7 @@ const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
     if (!galleryRef.current) return;
 
     const scrollPosition = galleryRef.current.scrollLeft;
-    const itemWidth = galleryRef.current.scrollWidth / schedules.length;
+    const itemWidth = galleryRef.current.scrollWidth;
     const index = Math.round(scrollPosition / itemWidth);
     setCurrentIndex(index);
   };
@@ -34,7 +34,7 @@ const AlbumCardsGallery = ({ schedules }: { schedules: Array<ISchedule> }) => {
         {schedules.length > 0 ?
           schedules.map((schedule, index) => (
             <div className="album-card-container" key={index}>
-              <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} />
+              <AlbumCard album={schedule.album} friendId={schedule.friend_id} deadline={schedule.deadline} is_active={schedule.is_active} />
             </div>
           ))
           :
