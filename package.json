@@ -46,8 +46,8 @@
     "workbox-streams": "^6.6.0"
   },
   "scripts": {
-    "start": "REACT_APP_CHOKIDAR_USEPOLLING=true react-scripts start",
-    "build": "react-scripts build",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
