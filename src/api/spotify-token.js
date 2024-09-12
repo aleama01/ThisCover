@@ -7,9 +7,9 @@ export default async function handler(req, res) {
   }
 
   // Retrieve environment variables securely on the server side
-  const client_id = process.env.CLIENT_ID;
-  const client_secret = process.env.CLIENT_SECRET;
-  const refresh_token = process.env.REFRESH_TOKEN;
+  const client_id = process.env.REACT_APP_CLIENT_ID;
+  const client_secret = process.env.REACT_APP_CLIENT_SECRET;
+  const refresh_token = process.env.REACT_APP_REFRESH_TOKEN;
 
   if (!client_id || !client_secret || !refresh_token) {
     return res.status(500).json({ error: 'Missing environment variables' });
