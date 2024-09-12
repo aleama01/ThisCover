@@ -56,7 +56,10 @@ const Registration = () => {
 
   return (
     <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
-      <h1>Register</h1>
+      <h1 className='text-center my-4'>
+        ThisCover
+      </h1>
+
       {previewImage && (
         <img
           src={previewImage}
@@ -65,36 +68,42 @@ const Registration = () => {
           style={{ width: '150px', height: '150px', borderRadius: '100%', objectFit: 'cover' }}
         />
       )}
-      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
+      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-center flex-column">
+        <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
+          <label htmlFor="profileImage" className="text-left ps-2">Profile Image</label>
+          <input
+            type="file"
+            id='user_img_input'
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-100 mb-2"
+          />
+        </div>
+        <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
 
-        <label htmlFor="profileImage" className="text-left ps-2">Profile Image (optional)</label>
-        <input
-          type="file"
-          id='user_img_input'
-          accept="image/*"
-          onChange={handleImageChange}
-          className="col-12 mb-2"
-        />
-
-        <label htmlFor="text" className="text-left ps-2">Username</label>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="col-12 mb-2"
-          required
-        />
-        <label htmlFor="password" className="text-left ps-2">Password</label>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="col-12 mb-4"
-          required
-        />
-        <button type="submit" className='btn-accent w-100'>Register</button>
+          <label htmlFor="text" className="text-left ps-2">Username</label>
+          <input
+            type="text"
+            placeholder="pinco_pallino"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-100 mb-2"
+            required
+          />
+        </div>
+        <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
+          <label htmlFor="password" className="text-left ps-2">Password</label>
+          <input
+            type="password"
+            placeholder="1234"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-100 mb-4"
+            required
+          />
+        </div>
+        <button type="submit" className='btn-accent col-12 col-sm-6'>Register</button>
+        <button className='btn-black col-12 col-sm-6' onClick={() => navigate("/login")}>Go to login</button>
       </form>
       {message && <p>{message}</p>}
     </div>

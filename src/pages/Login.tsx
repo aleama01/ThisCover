@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/login`, { username, password });
+      const response = await axios.post('http://localhost:3000/api/login', { username, password });
       setMessage(response.data.message);
       // Save token to local storage or context
       sessionStorage.setItem('token', response.data.token);
@@ -29,25 +29,32 @@ const Login = () => {
 
   return (
     <div className='min-vh-100 d-flex justify-content-center align-items-center flex-column dark-theme'>
-      <h1 className='text-center'>Login</h1>
-      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-start flex-column">
-        <label htmlFor="username" className="text-left ps-2">Username</label>
-        <input
-          type="username"
-          placeholder="JohnSmith"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="col-12 mb-2"
-        />
-        <label htmlFor="password" className="text-left ps-2">Password</label>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          className="col-12 mb-4"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" className='btn-accent w-100'>Login</button>
+      <h1 className='text-center my-4'>
+        ThisCover
+      </h1>
+      <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-center flex-column">
+        <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
+          <label htmlFor="username" className="text-left ps-2">Username</label>
+          <input
+            type="username"
+            placeholder="pinco_pallino"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-100 mb-2"
+          />
+        </div>
+        <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
+          <label htmlFor="password" className="text-left ps-2">Password</label>
+          <input
+            type="password"
+            placeholder="1234"
+            value={password}
+            className="w-100 mb-4"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" className='btn-accent col-12 col-sm-6'>Login</button>
+        <button className='btn-black col-12 col-sm-6' onClick={() => navigate("/registration")}>Go to registration</button>
       </form>
       {message && <p>{message}</p>}
     </div>

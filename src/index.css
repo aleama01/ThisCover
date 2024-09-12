@@ -100,6 +100,8 @@ button:focus {
   background-color: #131313;
   border-radius: 24px;
   width: 90dvw;
+  max-width: 500px;
+  max-height: 600px;
   padding: 13px 25px 25px 25px;
 }
 
@@ -117,6 +119,7 @@ button:focus {
   margin-left: auto;
   margin-right: auto;
   height: 80vw;
+  max-height: 500px;
   background-color: #1f1f1f;
 }
 
@@ -181,7 +184,8 @@ button:focus {
 }
 
 .start-5 {
-  left: 5%;
+  left: 0;
+  margin-left: 15px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -270,7 +274,7 @@ button:focus {
   background-color: #131313;
   border: none;
   width: 100%;
-  padding: 6px 0 6px 15%;
+  padding: 6px 0 6px 50px;
 }
 
 .add-friend-btn {
@@ -382,6 +386,7 @@ button:focus {
   background-color: #1f1f1f;
   color: #ababab;
   display: flex;
+  max-width: 600px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -408,6 +413,7 @@ button:focus {
   display: flex;
   flex-direction: column;
   width: 90dvw;
+  max-width: 600px;
   height: 500px;
   border-radius: 24px;
   padding: 5px 20px;
