@@ -320,7 +320,6 @@ button:focus {
   background-color: #131313;
   padding: 6px 8px;
   min-height: 70px;
-  width: 100%;
   color: #f1f1f1;
   resize: none;
 }
