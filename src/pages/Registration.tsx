@@ -34,7 +34,7 @@ const Registration = () => {
 
     try {
       // Register the user
-      const response = await axios.post('http://localhost:3000/api/register', formData, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -43,7 +43,7 @@ const Registration = () => {
       setMessage(response.data.message);
 
       // Automatically log in the user after registration
-      const responseLogin = await axios.post('http://localhost:3000/api/login', { username, password });
+      const responseLogin = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/login`, { username, password });
       sessionStorage.setItem('token', responseLogin.data.token);
       sessionStorage.setItem('id', responseLogin.data.id);
       setIsAuthenticated(true);

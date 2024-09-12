@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', { username, password });
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/login`, { username, password });
       setMessage(response.data.message);
       // Save token to local storage or context
       sessionStorage.setItem('token', response.data.token);

@@ -219,7 +219,7 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
         const friend_id = friend.id
         const album_id = album.id
         const date = final_date
-        const response = await axios.post(`http://localhost:3000/api/schedule`, { user_id, date, friend_id, album_id });
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/schedule`, { user_id, date, friend_id, album_id });
         console.log("Inserted successfully")
         setReload(!reload)
       } catch (error) {
@@ -316,7 +316,7 @@ const AddScheduleModal = () => {
     const fetchFriends = async () => {
       if (!isId) return
       try {
-        const response = await axios.get(`http://localhost:3000/api/friends/${isId}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/friends/${isId}`);
         if (response.data) {
           let friends_tmp = new Array<IUser>();
           for (let el of response.data) {

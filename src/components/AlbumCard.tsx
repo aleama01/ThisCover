@@ -13,7 +13,7 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
   useEffect(() => {
     const fetchFriend = async (id: number) => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/${id}`);
         setFriendUsername(response.data.username);
       } catch (error) {
         console.error('Error fetching schedule:', error);

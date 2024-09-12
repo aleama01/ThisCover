@@ -42,7 +42,7 @@ const ArchiveSection = ({ friend, schedules }: { friend: IUser, schedules: Array
         for (let schedule of schedules) {
           const userId = friend.id;
           const albumId = schedule.album.id;
-          const response = await axios.get(`http://localhost:3000/api/ratings/${userId}/${albumId}`);
+          const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/ratings/${userId}/${albumId}`);
 
           if (response.data) {
             const ratingForSongZero = response.data.find((r: IRating) => r.song_id === '0');
@@ -94,7 +94,7 @@ const FriendPage = () => {
     const fetchFriend = async () => {
       try {
         const userId = friend_id
-        const response = await axios.get(`http://localhost:3000/api/user/${userId}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/user/${userId}`);
         setFriend(response.data)
       } catch (error) {
         console.error('Error fetching schedule:', error);
@@ -108,7 +108,7 @@ const FriendPage = () => {
     const fetchSharedSchedules = async () => {
       try {
         if (!isId) return;
-        const response = await axios.get(`http://localhost:3000/api/schedules/${isId}/${friend_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/schedules/${isId}/${friend_id}`);
         if (response.data) {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {

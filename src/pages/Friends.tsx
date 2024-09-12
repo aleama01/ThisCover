@@ -18,7 +18,7 @@ const Friends = () => {
     const fetchFriends = async () => {
       if (!isId) return
       try {
-        const response = await axios.get(`http://localhost:3000/api/friends/${isId}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/friends/${isId}`);
         if (response.data) {
           let friends_tmp = new Array<IUser>();
           for (let el of response.data) {
