@@ -12,7 +12,7 @@ const SearchbarUsers = ({ id, friends }: { id: string, friends: Array<number> })
     const fetchUsers = async () => {
       if (!id) return
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/allusers/${id}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/allusers/${id}`);
         setAllUsers(response.data);
       } catch (error) {
         console.error('Error fetching schedule:', error);

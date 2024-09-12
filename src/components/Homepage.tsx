@@ -17,14 +17,14 @@ const Homepage = () => {
     const fetchSchedules = async () => {
       try {
         if (!isId) return;
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/schedules/${isId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${isId}`);
         if (response.data) {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {
             const album: any = await getOneAlbum(el.album_id)
             if (timeLeft(el.deadline) === "-1" && el.is_active == true) {
               try {
-                const res = await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/schedules/${isId}/${album.id}`, { isActive: false })
+                const res = await axios.put(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${isId}/${album.id}`, { isActive: false })
                 console.log("Updated state successfully");
               } catch (error) {
                 console.error('Error changing to inactive:', error);

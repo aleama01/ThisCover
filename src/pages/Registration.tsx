@@ -35,7 +35,7 @@ const Registration = () => {
     try {
       // Register the user
       console.log(process.env.REACT_APP_SERVER_URL)
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/register`, formData, {
+      const response = await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -44,7 +44,7 @@ const Registration = () => {
       setMessage(response.data.message);
 
       // Automatically log in the user after registration
-      const responseLogin = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/login`, { username, password });
+      const responseLogin = await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/login`, { username, password });
       sessionStorage.setItem('token', responseLogin.data.token);
       sessionStorage.setItem('id', responseLogin.data.id);
       setIsAuthenticated(true);

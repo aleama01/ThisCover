@@ -24,7 +24,7 @@ const Account = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/${isId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/users/${isId}`);
         setUserData(response.data)
       } catch (error) {
         console.error('Error fetching schedule:', error);
@@ -38,7 +38,7 @@ const Account = () => {
     const fetchSchedules = async () => {
       try {
         if (!isId) return;
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/schedules/${isId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${isId}`);
         if (response.data) {
           let schedules_tmp = new Array<ISchedule>
           for (let el of response.data) {
@@ -77,7 +77,7 @@ const Account = () => {
       if (!isId) return
       try {
         const userId = isId;
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/ratingshistory/${userId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/ratingshistory/${userId}`);
         if (response.data) {
           let ratings_tmp = new Array<any>();
           for (let el of response.data) {

@@ -19,7 +19,7 @@ const FriendCard = ({ friend, is_friend }: { friend: IUser, is_friend: boolean }
         if (!isId) return
         const friendId = friend.id;
         const userId = isId
-        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/friends`, { userId, friendId });
+        const response = await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/friends`, { userId, friendId });
         setReload(!reload);
       } catch (error) {
         console.error('Error adding friend:', error);

@@ -139,7 +139,7 @@ const RatingPage = () => {
   useEffect(() => {
     const fetchFriend = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/${friend_id}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/users/${friend_id}`);
         setFriend(response.data)
       } catch (error) {
         console.error('Error fetching schedule:', error);
@@ -147,7 +147,7 @@ const RatingPage = () => {
     };
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/users/${isId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/users/${isId}`);
         setUser(response.data)
       } catch (error) {
         console.error('Error fetching schedule:', error);
@@ -164,7 +164,7 @@ const RatingPage = () => {
       try {
         const userId = isId;
         const albumId = album_id;
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/ratings/${userId}/${albumId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/ratings/${userId}/${albumId}`);
         if (response.data) {
           let ratings_tmp = new Array<IRating>();
           for (let el of response.data) {
@@ -193,7 +193,7 @@ const RatingPage = () => {
       try {
         const userId = friend_id;
         const albumId = album_id;
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/ratings/${userId}/${albumId}`);
+        const response = await axios.get(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/ratings/${userId}/${albumId}`);
         if (response.data) {
           let ratings_tmp = new Array<IRating>();
           for (let el of response.data) {
@@ -265,7 +265,7 @@ const RatingPage = () => {
         if (rating.song_id === '0') {
           rating.comment = comment;
         }
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/ratings`, {
+        await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/ratings`, {
           userId,
           albumId: rating.album_id,
           songId: rating.song_id,
