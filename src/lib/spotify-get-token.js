@@ -1,5 +1,5 @@
 import { ISong } from '../interfaces.tsx'
-require('dotenv').config({ debug: true })
+//require('dotenv').config({ debug: true })
 
 var client_id = process.env.REACT_APP_CLIENT_ID;
 var client_secret = process.env.REACT_APP_CLIENT_SECRET;
