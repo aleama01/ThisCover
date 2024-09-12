@@ -6,6 +6,7 @@ var client_secret = process.env.REACT_APP_CLIENT_SECRET;
 var refresh_token = process.env.REACT_APP_REFRESH_TOKEN;
 
 async function getAccessToken() {
+  console.log(refresh_token, client_id, client_secret)
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     body: new URLSearchParams({
