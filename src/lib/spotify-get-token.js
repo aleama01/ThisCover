@@ -1,26 +1,20 @@
-import { ISong } from '../interfaces.tsx'
-//require('dotenv').config({ debug: true })
-
-var client_id = process.env.REACT_APP_CLIENT_ID;
-var client_secret = process.env.REACT_APP_CLIENT_SECRET;
-var refresh_token = process.env.REACT_APP_REFRESH_TOKEN;
-
 async function getAccessToken() {
-  console.log(refresh_token, client_id, client_secret)
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    body: new URLSearchParams({
-      'grant_type': 'refresh_token',
-      refresh_token: refresh_token
-    }),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')),
-    },
-  });
+  try {
+    // Make a POST request to the Vercel function
+    const response = await fetch('/api/spotify-token', {
+      method: 'POST',
+    });
 
-  let res = await response.json();
-  return res
+    if (!response.ok) {
+      throw new Error('Failed to fetch access token');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching access token:', error);
+    throw error;
+  }
 }
 
 export const getAlbum = async (albumId) => {
