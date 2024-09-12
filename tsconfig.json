@@ -22,6 +22,7 @@
   },
   "include": [
     "src",
-    "src/lib"
+    "src/lib",
+    "api/spotify-token.js"
   ]
 }
