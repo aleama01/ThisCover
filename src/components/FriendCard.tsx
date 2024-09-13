@@ -34,7 +34,7 @@ const FriendCard = ({ friend, is_friend }: { friend: IUser, is_friend: boolean }
         <img src={friend.image_url} width={45} height={45} className="user-pic" crossOrigin="anonymous" alt="Profile Image" />
       </div>
       <div className='d-flex flex-column justify-start col-8'>
-        <div className='fw-300 fs-16'>
+        <div className='fw-300 fs-14'>
           {friend.username}
         </div>
       </div>

@@ -69,7 +69,7 @@ const Account = () => {
     };
 
     fetchSchedules();
-  }, [isId, reload]);
+  }, [reload]);
 
 
   useEffect(() => {

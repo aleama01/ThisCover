@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { text } from 'stream/consumers'
 import { AuthContext } from '../../AuthContext';
 import Layout from '../../components/Layout'
@@ -88,6 +88,7 @@ const RatingPage = () => {
   const [user, setUser] = useState<IUser>()
   const [friend, setFriend] = useState<IUser>()
   const { id, friend_id, album_id, is_active } = useParams();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -241,49 +242,78 @@ const RatingPage = () => {
   };
 
   const handleRatingChange = (songId: string, newRating: number) => {
-    let updatedRatings = new Array<IRating>;
-    if (ratingsData.filter(r => r.song_id === songId).length == 0) {
-      let rating: IRating = {
+    // Create a copy of the existing ratings
+    let updatedRatings = [...ratingsData];
+
+    // Find the index of the rating that matches the songId
+    const ratingIndex = updatedRatings.findIndex(r => r.song_id === songId);
+
+    if (ratingIndex === -1) {
+      // If the rating for the song doesn't exist, create a new rating object
+      const newRatingObj: IRating = {
         user_id: parseInt(isId),
         song_id: songId,
         album_id: albumData!.id,
         rating: newRating,
-        comment: songId == "0" ? comment : ""
-      }
-      updatedRatings.push(rating)
+        comment: songId === "0" ? comment : ""
+      };
+
+      // Add the new rating to the updated ratings array
+      updatedRatings.push(newRatingObj);
     } else {
-      updatedRatings = ratingsData.map(r => (r.song_id === songId ? { ...r, rating: newRating } : r));
+      // Update the existing rating with the new rating value
+      updatedRatings[ratingIndex] = { ...updatedRatings[ratingIndex], rating: newRating };
     }
 
+    // Update the state with the new ratings array
     setRatingsData(updatedRatings);
   };
 
   const handleSave = async () => {
     const userId = isId;
+
     try {
+      // Loop through each rating and send it to the server
       for (const rating of ratingsData) {
+        // Set the comment value if the songId is "0"
         if (rating.song_id === '0') {
           rating.comment = comment;
         }
+
+        // Make a POST request to save the rating
         await axios.post(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/ratings`, {
           userId,
           albumId: rating.album_id,
           songId: rating.song_id,
           rating: rating.rating,
-          comment: rating.comment || ""
+          comment: rating.comment // Use the rating.comment value here
         });
       }
     } catch (error) {
       console.error('Error saving ratings:', error);
     }
+
+    // Update reload state and open the modal
     setReload(!reload);
     setOpenModalRatings(true);
     setTimeout(() => setOpenModalRatings(false), 3500);
   };
 
+
+  const handleGoBack = () => {
+    navigate(-1)
+  }
+
   return (
     <Layout>
       {openModalRatings ? <ModalSaveRatings closeModal={setOpenModalRatings} /> : <></>}
+      <div className='position-absolute top-0 start-0 mx-3 my-4'>
+        <button onClick={handleGoBack} className="px-2 fs-12" style={{ rotate: "180deg", backgroundColor: "transparent", border: "none" }}>
+          <svg width="16" height="23" viewBox="0 0 19 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M0.5 0.849375L16.6707 13.5L0.5 26.1214L1.19637 27L18.5 13.5L1.18513 0L0.5 0.849375Z" fill="#F1F1F1" />
+          </svg>
+        </button>
+      </div>
 
       <div className='d-flex flex-row justify-content-start' style={{ marginTop: "10dvh", padding: "0 25px" }}>
         <img src={albumData?.image} width={160} height={160} className="object-fit-cover" style={{ backgroundColor: "#6d6d6d", borderRadius: "24px", objectFit: "cover" }}></img>

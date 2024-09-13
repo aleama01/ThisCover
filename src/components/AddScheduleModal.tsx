@@ -290,15 +290,15 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
           <div className='fs-14 fw-300 text-gray'>{album.artists![0].name}</div>
         </div>
 
-        <div className='search-friend-result'>
+        <div className='search-friend-result' style={{ height: "50px" }}>
           <img className="search-friend-result-img" src={friend.image_url} width={30} height={30}></img>
           <div className='fs-12 fw-400'>{friend.username}</div>
         </div>
       </div>
 
       <div className='d-flex flex-row justify-content-between'>
-        <button className='btn-black m-3 col' onClick={handleBack}>Back</button>
-        <button className='btn-accent m-3 col' onClick={handleSave}>Finish</button>
+        <button className='btn-black mx-3 col' onClick={handleBack}>Back</button>
+        <button className='btn-accent mx-3 col' onClick={handleSave}>Finish</button>
       </div>
     </>
   )

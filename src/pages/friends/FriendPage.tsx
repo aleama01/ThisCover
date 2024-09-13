@@ -82,7 +82,7 @@ const ArchiveSection = ({ friend, schedules }: { friend: IUser, schedules: Array
 
 
 const FriendPage = () => {
-  const { isId, setOpenScheduleModal } = useContext(AuthContext)
+  const { isId, reload, setOpenScheduleModal } = useContext(AuthContext)
   const [loading, setLoading] = useState<boolean>(true);
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
   const [friend, setFriend] = useState<IUser>();
@@ -140,7 +140,7 @@ const FriendPage = () => {
 
     fetchSharedSchedules();
     setTimeout(() => setLoading(false), 600)
-  }, [isId]);
+  }, [isId, reload]);
 
   const handleGoBack = () => {
     navigate(-1)
