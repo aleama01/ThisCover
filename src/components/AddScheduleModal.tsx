@@ -150,7 +150,7 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
   const { setOpenScheduleModal, isId, reload, setReload } = useContext(AuthContext)
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
-  const currentDay = new Date().getDay();
+  const currentDay = new Date().getUTCDate();
 
   const generateYears = (start: any, end: any) => {
     const years = [];
