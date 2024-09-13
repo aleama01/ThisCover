@@ -69,7 +69,7 @@ const Registration = () => {
       )}
       <form onSubmit={handleSubmit} className="d-flex w-75 justify-content-center align-items-center flex-column">
         <div className='d-flex align-items-start flex-column col-12 col-sm-6'>
-          <label htmlFor="profileImage" className="text-left ps-2">Profile Image</label>
+          <label htmlFor="file" className="text-left ps-2">Profile Image</label>
           <input
             type="file"
             id='user_img_input'
