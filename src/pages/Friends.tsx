@@ -43,8 +43,8 @@ const Friends = () => {
 
   return (
     <Layout>
-      <h1 className='text-left my-4' style={{ paddingLeft: "25px" }}>Friends </h1>
-      <div className='d-flex flex-column overflow-hidden '>
+      <h1 className='text-center my-4'>Friends </h1>
+      <div className='d-flex flex-column overflow-hidden w-100 mx-auto max-w-600'>
         <SearchbarUsers id={isId!} friends={friends.map(f => f.id)} />
         {loading ?
           <div className='position-absolute absolute-center'><Loading /></div> :

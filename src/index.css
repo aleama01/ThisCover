@@ -8,7 +8,6 @@ html {
 body {
   background-color: #171717;
   font-family: 'Montserrat', sans-serif !important;
-  font-weight: 200 !important;
   color: #f1f1f1;
   margin: 0;
 }
@@ -48,6 +47,7 @@ button {
   background-color: #1491F7;
   color: #f1f1f1;
   border: none;
+  font-weight: 400;
 }
 
 .btn-black {
@@ -84,10 +84,6 @@ button:focus {
   background: #abac8e;
 }
 
-.nav-link {
-  color: #f1f1f1 !important;
-}
-
 .navbar {
   background-color: #131313;
 }
@@ -95,6 +91,7 @@ button:focus {
 .nav-link {
   font-size: 12px !important;
   font-weight: 300 !important;
+  color: #f1f1f1 !important;
 }
 
 .album-card {
@@ -528,4 +525,8 @@ button:focus {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.max-w-600 {
+  max-width: 600px;
 }
