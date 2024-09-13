@@ -29,7 +29,7 @@ export const getAlbum = async (albumId) => {
 
 export const getSongs = async (albumId) => {
   const { access_token } = await getAccessToken();
-  return fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks`, {
+  return fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=50`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
