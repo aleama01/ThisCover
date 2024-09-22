@@ -14,7 +14,6 @@ const ModalRemoveAlbum = ({ closeModal, album, userId, friendId }: { closeModal:
       if (!album || !friendId || !userId) return
       const albumId = album.id
       const response = await axios.delete(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${userId}/${friendId}/${albumId}`);
-      console.log("Deleted successfully", userId, friendId, albumId)
       setReload(!reload)
     }
     deleteRow()
