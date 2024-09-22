@@ -27,7 +27,7 @@ const ModalRemoveAlbum = ({ closeModal, album, handleDelete }: { closeModal: Fun
           <button className='btn-black w-100 p-2' onClick={() => closeModal(false)}>
             Back
           </button>
-          <button className='btn-accent w-100 p-2' onClick={() => handleDelete}>
+          <button className='btn-accent w-100 p-2' onClick={handleDelete()}>
             Remove
           </button>
         </div>
