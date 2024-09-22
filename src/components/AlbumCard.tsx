@@ -7,7 +7,7 @@ import { IAlbum, IUser } from '../interfaces'
 
 const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IAlbum, friendId: number, userId: number, deadline: Date, is_active: boolean }) => {
   const [friendUsername, setFriendUsername] = useState<string>()
-  const { isId } = useContext(AuthContext);
+  const { isId, reload, setReload } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +27,17 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
     navigate(`/rating/${isId}/${parseInt(isId) === friendId ? userId : friendId}/${album.id}/${is_active}`)
   }
 
+  const handleDelete = () => {
+    const deleteRow = async () => {
+      if (!album || !friendId || !userId) return
+      const albumId = album.id
+      const response = await axios.delete(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${userId}/${friendId}/${albumId}`);
+      console.log("Deleted successfully")
+      setReload(!reload)
+    }
+    deleteRow()
+  }
+
   return (
     <div className='album-card m-auto lh-1 '>
 
@@ -38,13 +49,15 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
 
 
       <div className='album-card-image my-3 position-relative'>
-        {/**
-        <a target="_blank" rel="noopener noreferrer" className='position-absolute top-0 end-0 p-2' href={album.url}>
-          <svg width="30" height="30" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M15.915 8.93686C12.6917 7.02562 7.375 6.85005 4.2975 7.78279C3.80333 7.93256 3.28083 7.65382 3.13167 7.16041C2.98167 6.667 3.26 6.14529 3.755 5.99552C7.2875 4.92466 13.1592 5.13184 16.87 7.33098C17.3142 7.59475 17.46 8.1672 17.1967 8.61069C16.9333 9.05418 16.3592 9.20062 15.915 8.93686ZM15.81 11.7684C15.5833 12.1345 15.1042 12.2493 14.7375 12.0246C12.05 10.3755 7.9525 9.89706 4.7725 10.8606C4.36083 10.9854 3.925 10.7533 3.8 10.3422C3.67583 9.93034 3.90833 9.49684 4.32 9.3712C7.95167 8.27121 12.4667 8.80373 15.5533 10.6983C15.92 10.923 16.035 11.4031 15.81 11.7684ZM14.5858 14.4867C14.4067 14.7813 14.0225 14.8736 13.7292 14.6939C11.3808 13.2611 8.425 12.9374 4.94417 13.7312C4.60917 13.8078 4.275 13.5981 4.19833 13.2636C4.12167 12.9283 4.33083 12.5946 4.66667 12.5181C8.47583 11.6486 11.7433 12.023 14.3792 13.6314C14.6733 13.8102 14.7658 14.1938 14.5858 14.4867ZM10 0.0853882C4.4775 0.0853882 0 4.55606 0 10.0701C0 15.585 4.4775 20.0549 10 20.0549C15.5233 20.0549 20 15.585 20 10.0701C20 4.55606 15.5233 0.0853882 10 0.0853882Z" fill="#F1F1F1" />
+
+        <button className='position-absolute top-0 end-0 p-2' onClick={handleDelete}>
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="#191919" stroke="#F1F1F1" />
+            <path fillRule="evenodd" clipRule="evenodd" d="M13.9728 13.1381L18.4727 8.63743C18.5875 8.52256 18.7394 8.46512 18.8905 8.46512C19.2084 8.46512 19.4806 8.72005 19.4806 9.05445C19.4806 9.2063 19.4232 9.35737 19.3083 9.47304L14.8077 13.9729L19.3075 18.4727C19.4232 18.5884 19.4806 18.7394 19.4806 18.8905C19.4806 19.2265 19.206 19.4806 18.8905 19.4806C18.7394 19.4806 18.5875 19.4232 18.4727 19.3083L13.9728 14.8085L9.47301 19.3083C9.35813 19.4232 9.20627 19.4806 9.0552 19.4806C8.73969 19.4806 8.46509 19.2265 8.46509 18.8905C8.46509 18.7394 8.52253 18.5884 8.63819 18.4727L13.138 13.9729L8.6374 9.47304C8.52253 9.35737 8.46509 9.2063 8.46509 9.05445C8.46509 8.72005 8.73733 8.46512 9.0552 8.46512C9.20627 8.46512 9.35813 8.52256 9.47301 8.63743L13.9728 13.1381Z" fill="#F1F1F1" />
           </svg>
-        </a>
-      */}
+
+        </button>
+
         <img src={album.image} className="album-card-image" width={300} height={300} />
       </div>
 
