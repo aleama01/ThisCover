@@ -5,7 +5,20 @@ import { AuthContext } from '../AuthContext';
 import { timeLeft } from '../functions'
 import { IAlbum, IUser } from '../interfaces'
 
-const ModalRemoveAlbum = ({ closeModal, album, handleDelete }: { closeModal: Function, album: IAlbum, handleDelete: Function }) => {
+const ModalRemoveAlbum = ({ closeModal, album, userId, friendId }: { closeModal: Function, album: IAlbum, userId: number, friendId: number }) => {
+  const { reload, setReload } = useContext(AuthContext)
+
+  const handleDelete = () => {
+    const deleteRow = async () => {
+      if (!album || !friendId || !userId) return
+      const albumId = album.id
+      const response = await axios.delete(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${userId}/${friendId}/${albumId}`);
+      console.log("Deleted successfully")
+      setReload(!reload)
+    }
+    deleteRow()
+    setReload(!reload)
+  }
   return (
     <div className='modal-rating'>
       <div className='p-4 modal-rating-div w-75 position-relative'>
@@ -27,7 +40,7 @@ const ModalRemoveAlbum = ({ closeModal, album, handleDelete }: { closeModal: Fun
           <button className='btn-black w-100 p-2' onClick={() => closeModal(false)}>
             Back
           </button>
-          <button className='btn-accent w-100 p-2' onClick={handleDelete()}>
+          <button className='btn-accent w-100 p-2' onClick={handleDelete}>
             Remove
           </button>
         </div>
@@ -59,21 +72,10 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
     navigate(`/rating/${isId}/${parseInt(isId) === friendId ? userId : friendId}/${album.id}/${is_active}`)
   }
 
-  const handleDelete = () => {
-    const deleteRow = async () => {
-      if (!album || !friendId || !userId) return
-      const albumId = album.id
-      const response = await axios.delete(`https://thiscover-e6fe268d2ce8.herokuapp.com/api/schedules/${userId}/${friendId}/${albumId}`);
-      console.log("Deleted successfully")
-      setReload(!reload)
-    }
-    deleteRow()
-    setReload(!reload)
-  }
 
   return (
     <div className='album-card m-auto lh-1 '>
-      {openModal ? <ModalRemoveAlbum closeModal={setOpenModal} album={album} handleDelete={handleDelete} /> : <></>}
+      {openModal ? <ModalRemoveAlbum closeModal={setOpenModal} album={album} userId={userId} friendId={friendId} /> : <></>}
       <div className='d-flex w-100 align-items-center fs-14 pt-2 fw-200'>
         <div className='ms-2 fw-400'>{friendUsername}</div>
         <div className='justify-self-end ms-auto text-gray'>{timeLeft(deadline)}</div>
