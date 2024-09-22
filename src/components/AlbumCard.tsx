@@ -50,13 +50,13 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
 
       <div className='album-card-image my-3 position-relative'>
 
-        <button className='position-absolute top-0 end-0 p-2' onClick={handleDelete}>
+        <div className='position-absolute top-0 end-0 m-2' onClick={handleDelete}>
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="#191919" stroke="#F1F1F1" />
+            <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="#191919dd" stroke="#F1F1F1" />
             <path fillRule="evenodd" clipRule="evenodd" d="M13.9728 13.1381L18.4727 8.63743C18.5875 8.52256 18.7394 8.46512 18.8905 8.46512C19.2084 8.46512 19.4806 8.72005 19.4806 9.05445C19.4806 9.2063 19.4232 9.35737 19.3083 9.47304L14.8077 13.9729L19.3075 18.4727C19.4232 18.5884 19.4806 18.7394 19.4806 18.8905C19.4806 19.2265 19.206 19.4806 18.8905 19.4806C18.7394 19.4806 18.5875 19.4232 18.4727 19.3083L13.9728 14.8085L9.47301 19.3083C9.35813 19.4232 9.20627 19.4806 9.0552 19.4806C8.73969 19.4806 8.46509 19.2265 8.46509 18.8905C8.46509 18.7394 8.52253 18.5884 8.63819 18.4727L13.138 13.9729L8.6374 9.47304C8.52253 9.35737 8.46509 9.2063 8.46509 9.05445C8.46509 8.72005 8.73733 8.46512 9.0552 8.46512C9.20627 8.46512 9.35813 8.52256 9.47301 8.63743L13.9728 13.1381Z" fill="#F1F1F1" />
           </svg>
 
-        </button>
+        </div>
 
         <img src={album.image} className="album-card-image" width={300} height={300} />
       </div>
