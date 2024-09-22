@@ -102,7 +102,7 @@ const FriendPage = () => {
     };
 
     fetchFriend();
-  }, []);
+  }, [reload]);
 
   useEffect(() => {
     const fetchSharedSchedules = async () => {

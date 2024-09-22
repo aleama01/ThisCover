@@ -5,8 +5,40 @@ import { AuthContext } from '../AuthContext';
 import { timeLeft } from '../functions'
 import { IAlbum, IUser } from '../interfaces'
 
+const ModalRemoveAlbum = ({ closeModal, album, handleDelete }: { closeModal: Function, album: IAlbum, handleDelete: Function }) => {
+  return (
+    <div className='modal-rating'>
+      <div className='p-4 modal-rating-div w-75 position-relative'>
+        <svg className="position-absolute top-0 end-0 m-2" onClick={() => closeModal(false)} width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fillRule="evenodd" clipRule="evenodd" d="M14.5 13.2071L21.4104 6.29542C21.5869 6.119 21.8201 6.03079 22.0521 6.03079C22.5402 6.03079 22.9583 6.42229 22.9583 6.93583C22.9583 7.16904 22.8701 7.40104 22.6937 7.57867L15.782 14.4891L22.6925 21.3996C22.8701 21.5772 22.9583 21.8092 22.9583 22.0412C22.9583 22.5572 22.5366 22.9475 22.0521 22.9475C21.8201 22.9475 21.5869 22.8593 21.4104 22.6828L14.5 15.7724L7.58953 22.6828C7.41311 22.8593 7.17991 22.9475 6.94791 22.9475C6.46336 22.9475 6.04166 22.5572 6.04166 22.0412C6.04166 21.8092 6.12986 21.5772 6.30749 21.3996L13.2179 14.4891L6.30628 7.57867C6.12986 7.40104 6.04166 7.16904 6.04166 6.93583C6.04166 6.42229 6.45974 6.03079 6.94791 6.03079C7.17991 6.03079 7.41311 6.119 7.58953 6.29542L14.5 13.2071Z" fill="#F1F1F1" />
+        </svg>
+        <div className='my-3'>
+          Do you want to remove this album?
+        </div>
+        <div className='schedule-recap'>
+          <img className="search-album-result-img" src={album.image} width={200} height={200}></img>
+          <div className='col px-2 text-center'>
+            <div className='fs-16 fw-400'>{album.title}</div>
+            <div className='fs-14 fw-300 text-gray'>{album.artists![0].name}</div>
+          </div>
+        </div>
+
+        <div className='d-flex flex-row'>
+          <button className='btn-black w-100 p-2' onClick={() => closeModal(false)}>
+            Back
+          </button>
+          <button className='btn-accent w-100 p-2' onClick={() => handleDelete}>
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IAlbum, friendId: number, userId: number, deadline: Date, is_active: boolean }) => {
-  const [friendUsername, setFriendUsername] = useState<string>()
+  const [friendUsername, setFriendUsername] = useState<string>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { isId, reload, setReload } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -36,11 +68,12 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
       setReload(!reload)
     }
     deleteRow()
+    setReload(!reload)
   }
 
   return (
     <div className='album-card m-auto lh-1 '>
-
+      {openModal ? <ModalRemoveAlbum closeModal={setOpenModal} album={album} handleDelete={handleDelete} /> : <></>}
       <div className='d-flex w-100 align-items-center fs-14 pt-2 fw-200'>
         <div className='ms-2 fw-400'>{friendUsername}</div>
         <div className='justify-self-end ms-auto text-gray'>{timeLeft(deadline)}</div>
@@ -50,7 +83,7 @@ const AlbumCard = ({ album, friendId, userId, deadline, is_active }: { album: IA
 
       <div className='album-card-image my-3 position-relative'>
 
-        <div className='position-absolute top-0 end-0 m-2' onClick={handleDelete}>
+        <div className='position-absolute top-0 end-0 m-2' onClick={() => setOpenModal(true)}>
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="#191919dd" stroke="#F1F1F1" />
             <path fillRule="evenodd" clipRule="evenodd" d="M13.9728 13.1381L18.4727 8.63743C18.5875 8.52256 18.7394 8.46512 18.8905 8.46512C19.2084 8.46512 19.4806 8.72005 19.4806 9.05445C19.4806 9.2063 19.4232 9.35737 19.3083 9.47304L14.8077 13.9729L19.3075 18.4727C19.4232 18.5884 19.4806 18.7394 19.4806 18.8905C19.4806 19.2265 19.206 19.4806 18.8905 19.4806C18.7394 19.4806 18.5875 19.4232 18.4727 19.3083L13.9728 14.8085L9.47301 19.3083C9.35813 19.4232 9.20627 19.4806 9.0552 19.4806C8.73969 19.4806 8.46509 19.2265 8.46509 18.8905C8.46509 18.7394 8.52253 18.5884 8.63819 18.4727L13.138 13.9729L8.6374 9.47304C8.52253 9.35737 8.46509 9.2063 8.46509 9.05445C8.46509 8.72005 8.73733 8.46512 9.0552 8.46512C9.20627 8.46512 9.35813 8.52256 9.47301 8.63743L13.9728 13.1381Z" fill="#F1F1F1" />

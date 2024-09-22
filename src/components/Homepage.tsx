@@ -59,7 +59,7 @@ const Homepage = () => {
 
     fetchSchedules();
     //   setTimeout(() => setReload(!reload), 300)
-  }, []);
+  }, [reload]);
 
   return (
     <Layout>
