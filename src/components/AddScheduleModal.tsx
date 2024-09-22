@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 import { IAlbum, IUser } from '../interfaces';
 import { getSearchResults } from '../lib/spotify-get-token';
@@ -151,6 +152,7 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const currentDay = new Date().getUTCDate();
+  const navigate = useNavigate()
 
   const generateYears = (start: any, end: any) => {
     const years = [];
@@ -230,6 +232,7 @@ const Step2 = ({ step, setStep, album, friend, date, setDate }: { step: number, 
     submitRating();
     setReload(!reload);
     setOpenScheduleModal(false);
+    navigate("/")
   }
 
   return (
