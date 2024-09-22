@@ -12,12 +12,12 @@ const ModalRemoveAlbum = ({ closeModal, album, handleDelete }: { closeModal: Fun
         <svg className="position-absolute top-0 end-0 m-2" onClick={() => closeModal(false)} width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fillRule="evenodd" clipRule="evenodd" d="M14.5 13.2071L21.4104 6.29542C21.5869 6.119 21.8201 6.03079 22.0521 6.03079C22.5402 6.03079 22.9583 6.42229 22.9583 6.93583C22.9583 7.16904 22.8701 7.40104 22.6937 7.57867L15.782 14.4891L22.6925 21.3996C22.8701 21.5772 22.9583 21.8092 22.9583 22.0412C22.9583 22.5572 22.5366 22.9475 22.0521 22.9475C21.8201 22.9475 21.5869 22.8593 21.4104 22.6828L14.5 15.7724L7.58953 22.6828C7.41311 22.8593 7.17991 22.9475 6.94791 22.9475C6.46336 22.9475 6.04166 22.5572 6.04166 22.0412C6.04166 21.8092 6.12986 21.5772 6.30749 21.3996L13.2179 14.4891L6.30628 7.57867C6.12986 7.40104 6.04166 7.16904 6.04166 6.93583C6.04166 6.42229 6.45974 6.03079 6.94791 6.03079C7.17991 6.03079 7.41311 6.119 7.58953 6.29542L14.5 13.2071Z" fill="#F1F1F1" />
         </svg>
-        <div className='my-3'>
+        <div className='my-1'>
           Do you want to remove this album?
         </div>
         <div className='schedule-recap'>
           <img className="search-album-result-img" src={album.image} width={200} height={200}></img>
-          <div className='col px-2 text-center'>
+          <div className='col p-2 text-center'>
             <div className='fs-16 fw-400'>{album.title}</div>
             <div className='fs-14 fw-300 text-gray'>{album.artists![0].name}</div>
           </div>
