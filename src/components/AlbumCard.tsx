@@ -7,6 +7,7 @@ import { IAlbum, IUser } from '../interfaces'
 
 const ModalRemoveAlbum = ({ closeModal, album, userId, friendId }: { closeModal: Function, album: IAlbum, userId: number, friendId: number }) => {
   const { reload, setReload } = useContext(AuthContext)
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     const deleteRow = async () => {
@@ -17,7 +18,7 @@ const ModalRemoveAlbum = ({ closeModal, album, userId, friendId }: { closeModal:
       setReload(!reload)
     }
     deleteRow()
-    setReload(!reload)
+    navigate("/")
     closeModal(false)
   }
   return (
